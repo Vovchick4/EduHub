@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -14,7 +15,6 @@
             <a href="{% url 'user_list' %}">Користувачі</a>
         </nav>
     </header>
-
     {% if messages %}
       <ul class="messages">
         {% for message in messages %}
