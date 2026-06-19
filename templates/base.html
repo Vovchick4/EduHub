@@ -1,26 +1,32 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}EduHub{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
     <header>
         <nav>
             <a href="{% url 'register' %}">Реєстрація</a> |
-            <a href="{% url 'login' %}">Вхід</a> |
+            {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Вихід</a>
+            {% else %}
+            <a href="{% url 'login' %}">Вхід</a>
+            {% endif %}|
             <a href="{% url 'profile' %}">Профіль</a> |
             <a href="{% url 'user_list' %}">Користувачі</a>
         </nav>
     </header>
     {% if messages %}
-      <ul class="messages">
+    <ul class="messages">
         {% for message in messages %}
-          <li>{{ message }}</li>
+        <li>{{ message }}</li>
         {% endfor %}
-      </ul>
+    </ul>
     {% endif %}
 
     <main>
@@ -31,4 +37,5 @@
         <p>&copy; 2026 EduHub</p>
     </footer>
 </body>
+
 </html>

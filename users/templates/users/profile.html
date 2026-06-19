@@ -1,18 +1,15 @@
-{% extends "base.html" %}
-
-{% block title %}Профіль{% endblock %}
-
-{% block content %}
-<h2>Профіль користувача</h2>
-
-{% if user.avatar %}
-  <img src="{{ user.avatar.url }}" alt="Avatar" width="150">
+{% if user.is_authenticated %}
+  <h2>Профіль користувача</h2>
+  {% if user.avatar %}
+    <img src="{{ user.avatar.url }}" alt="Avatar" width="150">
+  {% else %}
+    <p>No avatar uploaded</p>
+  {% endif %}
+  <p>Ім’я: {{ user.name }}</p>
+  <p>Прізвище: {{ user.surname }}</p>
+  <p>Біографія: {{ user.bio }}</p>
+  <p>Email: {{ user.email }}</p>
+  <p>Роль: {{ user.role }}</p>
 {% else %}
-  <p>No avatar uploaded</p>
+  <p>Ви не залогінені</p>
 {% endif %}
-<p>Ім’я: {{ user.name }}</p>
-<p>Прізвище: {{ user.surname }}</p>
-<p>Біографія: {{ user.bio }}</p>
-<p>Email: {{ user.email }}</p>
-<p>Роль: {{ user.role }}</p>
-{% endblock %}

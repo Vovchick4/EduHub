@@ -7,11 +7,10 @@ class User(AbstractUser):
     USER_ROLES = (
         ('student', 'student'),
         ('teacher', 'teacher'),
-        ('admin', 'admin'),
-        ('unauthorized', 'unauthorized')
+        ('admin', 'admin')
     )
     name = models.CharField(max_length=30, blank=False, null=False)
-    surname = models.CharField(max_length=30, blank=True, null=True)
+    surname = models.CharField(max_length=30, blank=False, null=False)
     bio = models.TextField(max_length=500, blank=True, null=True)
     email = models.EmailField(max_length=100, blank=False, null=False, unique=True)
     role = models.CharField(max_length=30, choices=USER_ROLES, default='student')
