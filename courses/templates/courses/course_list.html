@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Список курсів{% endblock %}
+
+{% block content %}
+<h2>Список курсів</h2>
+
+<ul>
+  {% for course in page_obj %}
+    <li>
+      <!-- <a href="{% url 'course_detail' course.pk %}"> -->
+        {{ course.title }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+
+<div class="pagination">
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">Попередня</a>
+  {% endif %}
+
+  <span>Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}</span>
+
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Наступна</a>
+  {% endif %}
+</div>
+{% endblock %}
