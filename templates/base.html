@@ -18,7 +18,8 @@
             <a href="{% url 'login' %}">Вхід</a>
             {% endif %}|
             <a href="{% url 'profile' %}">Профіль</a> |
-            <a href="{% url 'user_list' %}">Користувачі</a>
+            <a href="{% url 'users_list' %}">Користувачі</a> |
+            <a href="{% url 'course_list' %}">Курси</a> |
         </nav>
     </header>
     {% if messages %}

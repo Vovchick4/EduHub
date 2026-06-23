@@ -43,7 +43,7 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     
 class UserListView(ListView):
     model = User
-    template_name = 'users/list.html'
+    template_name = 'users/users_list.html'
     context_object_name = 'users'
     def get_queryset(self):
         user = self.request.user

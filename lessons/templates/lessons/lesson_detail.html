@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ lesson.title }}</h2>
+<p>{{ lesson.content }}</p>
+
+{% if lesson.video_url %}
+  <p><a href="{{ lesson.video_url }}" target="_blank">Переглянути відео</a></p>
+{% endif %}
+
+<a href="{% url 'lesson_list' lesson.course.id %}">⬅ Назад до списку уроків</a>
+{% endblock %}
