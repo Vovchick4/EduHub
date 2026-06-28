@@ -1,28 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Список курсів</h2>
+<div class="courses-container">
+    <h2>Список курсів</h2>
 
-<ul>
-  {% for course in courses %}
-    <li>
-      <a href="{% url 'course_detail' course.id %}">{{ course.title }}</a>
-      — {{ course.description|truncatewords:15 }}
-    </li>
-  {% empty %}
-    <li>Немає доступних курсів.</li>
-  {% endfor %}
-</ul>
+    <!-- Кнопка створення курсу доступна ТІЛЬКИ для teacher та admin -->
+    {% if request.user.role == 'teacher' or request.user.role == 'admin' %}
+        <div class="actions-bar" style="margin-bottom: 20px;">
+            <a href="{% url 'course_create' %}" class="btn btn-primary">➕ Додати новий курс</a>
+        </div>
+    {% endif %}
 
-<div class="pagination">
-  {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.previous_page_number }}">Попередня</a>
-  {% endif %}
+    <ul class="courses-list">
+      {% for course in courses %}
+        <li>
+          <!-- Виправлено: course.id змінено на course.pk, course.title змінено на course.name -->
+          <a href="{% url 'course_detail' course.pk %}"><strong>{{ course.name }}</strong></a>
+          — {{ course.description|truncatewords:15 }}
+        </li>
+      {% empty %}
+        <li>Немає доступних курсів.</li>
+      {% endfor %}
+    </ul>
 
-  <span>Сторінка {{ page_obj.number }} із {{ page_obj.paginator.num_pages }}</span>
+    <!-- Блок пагінації (залишається ідеальним, додано лише класи для зручності) -->
+    {% if is_paginated %}
+    <div class="pagination" style="margin-top: 25px;">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">Попередня</a>
+      {% endif %}
 
-  {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}">Наступна</a>
-  {% endif %}
+      <span class="page-current">
+        Сторінка {{ page_obj.number }} із {{ page_obj.paginator.num_pages }}
+      </span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Наступна</a>
+      {% endif %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

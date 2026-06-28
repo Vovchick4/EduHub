@@ -11,15 +11,23 @@
 <body>
     <header>
         <nav>
-            <a href="{% url 'register' %}">Реєстрація</a> |
+
             {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}">Вихід</a>
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-logout"
+                    style="background: none; border: none; color: inherit; cursor: pointer; padding: 0; font: inherit;">
+                    Вийти 
+                </button> |
+                <a href="{% url 'profile' %}">Профіль</a> |
+                <a href="{% url 'course_list' %}">Курси</a> |
+            </form>
+
             {% else %}
-            <a href="{% url 'login' %}">Вхід</a>
-            {% endif %}|
-            <a href="{% url 'profile' %}">Профіль</a> |
-            <a href="{% url 'users_list' %}">Користувачі</a> |
-            <a href="{% url 'course_list' %}">Курси</a> |
+            <a href="{% url 'register' %}">Реєстрація</a> |
+            <a href="{% url 'login' %}">Вхід</a> |
+            {% endif %}
+            
         </nav>
     </header>
     {% if messages %}
@@ -31,7 +39,8 @@
     {% endif %}
 
     <main>
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </main>
 
     <footer>

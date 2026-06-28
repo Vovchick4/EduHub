@@ -1,17 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>{{ course.title }}</h2>
-<p>{{ course.description }}</p>
+<div class="course-detail-container">
+    <a href="{% url 'course_list' %}">⬅ Назад до списку курсів</a>
 
-<h3>Уроки цього курсу:</h3>
-<ul>
-  {% for lesson in course.lessons.all %}
-    <li>
-      <a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.title }}</a>
-    </li>
-  {% empty %}
-    <li>У цьому курсі ще немає уроків.</li>
-  {% endfor %}
-</ul>
+    <!-- Кнопки для вчителя/адміна -->
+    {% if request.user == course.author or request.user.role == 'admin' %}
+        <div class="teacher-actions mt-3 mb-3">
+            <a href="{% url 'lesson_create' course_id=course.pk %}" class="btn btn-primary">Додати урок</a>
+            <a href="{% url 'course_delete' pk=course.pk %}" class="btn btn-danger">Видалити курс</a>
+        </div>
+    {% endif %}
+
+    <!-- Інформація про курс -->
+    <h2>{{ course.name }}</h2>
+    <p>{{ course.description }}</p>
+
+    <h3>Уроки цього курсу:</h3>
+    <ul class="lessons-list">
+      <!-- КРИТИЧНО: Перебираємо object_list (тут лежать пагіновані уроки) -->
+      {% for lesson in object_list %}
+        <li>
+          <a href="{% url 'lesson_detail' course_id=course.pk pk=lesson.pk %}">{{ lesson.title }}</a>
+        </li>
+      {% empty %}
+        <li>У цьому курсі ще немає уроків.</li>
+      {% endfor %}
+    </ul>
+
+    <!-- ПАГІНАЦІЯ: Тепер вона працює всередині DetailView як рідна! -->
+    {% if is_paginated %}
+    <div class="pagination" style="margin-top: 25px;">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">Попередня</a>
+      {% endif %}
+
+      <span class="page-current">
+        Сторінка {{ page_obj.number }} із {{ page_obj.paginator.num_pages }}
+      </span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Наступна</a>
+      {% endif %}
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

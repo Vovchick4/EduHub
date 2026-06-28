@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Видалення уроку</h2>
+    <p>Ви впевнені, що хочете видалити <strong>"{{ course.name }}"</strong>?</p>    
+    <!-- Форма обов'язково надсилає POST-запит для видалення -->
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Так, видалити </button>
+        <a href="{% url 'lesson_detail' course_id=lesson.course.pk pk=lesson.pk %}" class="btn btn-secondary">Скасувати</a>
+    </form>
+</div>
+{% endblock %}
