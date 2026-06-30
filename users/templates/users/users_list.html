@@ -6,7 +6,7 @@
 <h2>Список користувачів</h2>
 <ul>
   {% for u in users %}
-    <li>{{ u.name }} {{ u.surname }} ({{ u.role }})</li>
+    <li>{{ u.first_name }} {{ u.last_name}} </li>
   {% empty %}
     <li>Немає користувачів</li>
   {% endfor %}

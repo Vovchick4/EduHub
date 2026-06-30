@@ -4,9 +4,19 @@
 <h2>{{ lesson.title }}</h2>
 <p>{{ lesson.content }}</p>
 
-{% if lesson.video_url %}
-  <p><a href="{{ lesson.video_url }}" target="_blank">Переглянути відео</a></p>
+{% if request.user == lesson.course.author or request.user.role == 'admin' %}
+    <div class="teacher-actions mt-4">
+        <!-- Посилання на редагування -->
+        <a href="{% url 'lesson_update' course_id=lesson.course.pk pk=lesson.pk %}" class="btn btn-warning">
+            Редагувати урок
+        </a>
+        
+        <!-- Посилання на ту саму сторінку підтвердження видалення -->
+        <a href="{% url 'lesson_delete' course_id=lesson.course.pk pk=lesson.pk %}" class="btn btn-danger">
+            Видалити урок
+        </a>
+    </div>
 {% endif %}
 
-<a href="{% url 'lesson_list' lesson.course.id %}">⬅ Назад до списку уроків</a>
+<a href="{% url 'course_detail' pk=lesson.course.pk %}">⬅ Назад до списку уроків</a>
 {% endblock %}
