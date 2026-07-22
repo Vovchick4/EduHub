@@ -1,36 +1,357 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
+/* --- Скидання стилів та змінні --- */
+:root {
+    --bg-color: #0a051b;
+    --header-bg: #11092c;
+    --text-main: #ffffff;
+    --text-muted: #b3b0c2;
+    --purple-glow: #6f42c1;
+    --purple-bright: #a155ff;
+    --blue-accent: #00d2ff;
+    --card-bg: linear-gradient(135deg, #160d33 0%, #0d0624 100%);
+}
+
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-header {
-    background: #333;
-    color: #fff;
-    padding: 10px;
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-nav a {
-    color: #fff;
-    margin-right: 10px;
+a {
+    color: inherit;
     text-decoration: none;
 }
 
-.messages {
-    background: #e0ffe0;
+/* --- Шапка сайту --- */
+.main-header {
+    background-color: var(--header-bg);
+    border-bottom: 1px solid #1f1445;
+    padding: 15px 0;
+}
+
+.logo-text {
+    background: linear-gradient(45deg, var(--text-main), var(--purple-bright));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+.header-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.logo a {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.main-nav a, .btn-logout {
+    font-size: 16px;
+    color: var(--text-muted);
+    transition: color 0.3s;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.main-nav a:hover, .btn-logout:hover {
+    color: var(--text-main);
+}
+
+.btn-logout:hover {
+    background: rgba(255, 74, 74, 0.1);
+    box-shadow: 0 0 10px rgba(255, 74, 74, 0.3);
+}
+
+/* Звичайні текстові посилання в шапці */
+.nav-link {
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.3s;
+    padding: 8px 12px;
+}
+
+.nav-link:hover {
+    color: var(--purple-bright);
+}
+
+/* Базовий стиль для всіх кнопок в навігації */
+.btn-nav {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+/* Кнопка "Вхід" (контурна з підсвічуванням) */
+.btn-login {
+    background: transparent;
+    color: var(--purple-bright);
+    border: 2px solid var(--purple-bright);
+}
+
+.btn-login:hover {
+    background: rgba(161, 85, 255, 0.1);
+    box-shadow: 0 0 15px rgba(161, 85, 255, 0.4);
+}
+
+/* Кнопка "Реєстрація" (залита, яскрава) */
+.btn-register {
+    background: linear-gradient(135deg, var(--purple-bright) 0%, #7f39fb 100%);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(111, 66, 193, 0.4);
+}
+
+.btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(161, 85, 255, 0.6);
+}
+
+/* Форма виходу, щоб не ламала флексбокс */
+.logout-form {
+    display: inline-block;
+    margin: 0;
+}
+
+/* Стиль замість зламаної картинки */
+.education-icon {
+    font-size: 80px;
+    animation: float 3s ease-in-out infinite;
+    user-select: none;
+}
+
+/* --- Головний контейнер контенту --- */
+.content-wrapper {
+    flex: 1;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: 80px;
+    flex-wrap: wrap;
+}
+
+.avatar-glow {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(111,66,193,0.6) 0%, rgba(10,5,27,0) 70%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-avatar {
+    width: 180px;
+    height: auto;
+    z-index: 2;
+}
+
+.hero-intro {
+    max-width: 500px;
+}
+
+.greeting {
+    font-size: 18px;
+    color: var(--text-muted);
+}
+
+.highlight-purple {
+    color: var(--purple-bright);
+    font-weight: 600;
+}
+
+.sub-greeting {
+    font-size: 28px;
+    margin-top: 10px;
+    font-weight: 400;
+}
+
+.main-heading {
+    font-size: 48px;
+    line-height: 1.2;
+    margin: 10px 0;
+}
+
+.oval-badge {
+    border: 2px solid var(--purple-bright);
+    padding: 0 15px;
+    border-radius: 50px;
+    display: inline-block;
+    color: var(--purple-bright);
+}
+
+.hero-subtext {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+/* --- Bio Section --- */
+.bio-section {
+    max-width: 800px;
+    margin-bottom: 80px;
+}
+
+.typing-title {
+    font-size: 36px;
+    font-weight: 600;
+}
+
+.cursor {
+    animation: blink 0.8s infinite;
+    color: var(--purple-bright);
+}
+
+.current-job {
+    font-size: 18px;
+    margin: 10px 0 25px 0;
+}
+
+.highlight-blue {
+    color: var(--blue-accent);
+    font-weight: bold;
+}
+
+.bio-description {
+    color: var(--text-muted);
+    font-size: 18px;
+    max-width: 700px;
+}
+
+/* --- Experience Section & Grid --- */
+.experience-section {
+    margin-top: 40px;
+}
+
+.section-title {
+    font-size: 28px;
+    margin-bottom: 40px;
+}
+
+.experience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 25px;
+}
+
+.exp-card {
+    background: var(--card-bg);
+    border: 1px solid #23184c;
+    border-radius: 16px;
+    padding: 30px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.exp-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(111, 66, 193, 0.2);
+    border-color: var(--purple-glow);
+}
+
+.card-icon {
+    font-size: 32px;
+    background: #1f124b;
     padding: 10px;
-    border: 1px solid #ccc;
-    margin: 10px;
+    border-radius: 12px;
 }
 
-main {
-    padding: 20px;
+.card-content h4 {
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 
-footer {
-    background: #333;
-    color: #fff;
+.card-content p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.btn-card {
+    display: inline-block;
+    border: 1px solid var(--purple-bright);
+    color: var(--purple-bright);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    transition: background 0.3s, color 0.3s;
+}
+
+.btn-card:hover {
+    background: var(--purple-bright);
+    color: white;
+}
+
+/* --- Футер --- */
+.main-footer {
+    background-color: var(--header-bg);
     text-align: center;
-    padding: 10px;
+    padding: 30px;
+    color: var(--text-muted);
+    font-size: 14px;
+    border-top: 1px solid #1f1445;
+}
+
+/* Анімація курсора риски */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Адаптивність для мобільних екранів */
+@media (max-width: 768px) {
+    .experience-grid {
+        grid-template-columns: 1fr;
+    }
+    .hero-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    .main-heading {
+        font-size: 36px;
+    }
 }
