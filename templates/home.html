@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Головна - EduHub{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    
+    <!-- Hero Section (Головний банер платформи) -->
+    <section class="hero-section">
+        <div class="avatar-glow">
+            <div class="education-icon">🚀</div>
+        </div>
+        <div class="hero-intro">
+            <p class="greeting">Платформа сучасного навчання</p>
+            <h2 class="sub-greeting">Прокачай свої скіли разом з</h2>
+            <h1 class="main-heading">EduHub <span class="oval-badge">платформа...</span></h1>
+            <p class="hero-subtext">Отримуй актуальні знання від практикуючих спеціалістів та будуй кар'єру своєї мрії.</p>
+        </div>
+    </section>
+
+    <!-- Текст-презентація -->
+    <section class="bio-section">
+        <h2 class="typing-title">Твій старт в IT та інженерії<span class="cursor">|</span></h2>
+        <p class="current-job">Доступно <span class="highlight-blue">20+ напрямків</span> для твого розвитку.</p>
+        
+        <p class="bio-description">
+            Ми зібрали найкращі практичні курси в одному місці. Ніякої нудної теорії — тільки реальні проєкти, 
+            написання коду, розробка інтерфейсів та підтримка менторів на кожному етапі навчання.
+        </p>
+    </section>
+
+    <!-- Секція з курсами (замість Work Experience) -->
+    <section class="experience-section">
+        <h3 class="section-title">Популярні напрямки навчання</h3>
+        
+        <div class="experience-grid">
+            <!-- Картка 1 -->
+            <div class="exp-card">
+                <div class="card-icon">🐍</div>
+                <div class="card-content">
+                    <h4>Python Backend</h4>
+                    <p>Вивчи Django, FastAPI, роботу з базами даних SQL та створи свій перший потужний API.</p>
+                    <a href="#" class="btn-card">ДИВИТИСЬ КУРС</a>
+                </div>
+            </div>
+            
+            <!-- Картка 2 -->
+            <div class="exp-card">
+                <div class="card-icon">💻</div>
+                <div class="card-content">
+                    <h4>Frontend Development</h4>
+                    <p>Опануй верстку, сучасний JavaScript та бібліотеку React для створення інтерактивних сайтів.</p>
+                    <a href="#" class="btn-card">ДИВИТИСЬ КУРС</a>
+                </div>
+            </div>
+            
+            <!-- Картка 3 -->
+            <div class="exp-card">
+                <div class="card-icon">🎨</div>
+                <div class="card-content">
+                    <h4>UI/UX Design</h4>
+                    <p>Навчися проектувати зручні інтерфейси у Figma, створювати прототипи та працювати з композицією.</p>
+                    <a href="#" class="btn-card">ДИВИТИСЬ КУРС</a>
+                </div>
+            </div>
+            
+            <!-- Картка 4 -->
+            <div class="exp-card">
+                <div class="card-icon">👁️</div>
+                <div class="card-content">
+                    <h4>Computer Vision & ML</h4>
+                    <p>Поринь у світ штучного інтелекту: від обробки зображень з OpenCV до навчання моделей YOLO.</p>
+                    <a href="#" class="btn-card">ДИВИТИСЬ КУРС</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}
