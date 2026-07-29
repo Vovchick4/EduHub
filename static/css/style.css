@@ -355,3 +355,70 @@ a {
         font-size: 36px;
     }
 }
+/* Текст Профіль користувача */
+.profile-text {
+    color: #a855f7;
+    font-weight: bold;
+}
+/* Основний контейнер профілю. Розташовує ліву та праву частини поруч */
+.profile-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 80px;
+    width: 100%;
+}
+/* Ліва колонка: заголовок, фото та кнопки */
+.profile-left {
+    width: 500px;
+    flex: 0 0 500px ;
+}
+/* Права колонка: інформація про користувача */
+.profile-right {
+    flex: 1;
+    padding-top: 10px;
+}
+/* Відступ між рядками інформації */
+.profile-right p {
+    margin-bottom: 20px;
+}
+/* Аватар користувача */
+.profile-avatar {
+    display: block;
+    width: 500px;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 20px 0;
+}
+/* Контейнер кнопок */
+.profile-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 70px;
+}
+/* Аватар */
+.profile-avatar-container {
+    width: 400px;
+    height: 400px;
+    margin-top: 20px;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    border: 2px solid #8b5cf6;
+    background: #1d1136;
+}
+
+.avatar-icon {
+    font-size: 200px !important;
+    line-height: 1 !important;
+    display: block;
+}
