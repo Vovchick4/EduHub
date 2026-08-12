@@ -477,3 +477,80 @@ a {
         font-size: 36px;
     }
 }
+/* Текст Профіль користувача */
+.profile-text {
+    color: #a855f7;
+    text-align: center;
+    width: 100%;
+}
+/* Основний контейнер профілю. Розташовує ліву та праву частини поруч */
+.profile-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 80px;
+    width: 100%;
+}
+/* Ліва колонка: заголовок, фото та кнопки */
+.profile-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* Права колонка: інформація про користувача */
+.profile-right {
+    flex: 1;
+    padding-top: 10px;
+}
+/* Відступ між рядками інформації */
+.profile-right p {
+    margin-bottom: 20px;
+}
+/* Аватар користувача */
+.profile-avatar {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+/* Контейнер кнопок */
+.profile-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 70px;
+}
+/* Аватар */
+.profile-avatar-container {
+    width: 150px;
+    height: 150px;
+    margin-top: 20px;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    border: 2px solid #8b5cf6;
+    background: #1d1136;
+}
+
+.avatar-icon {
+    width: 100px;
+    height: 100px;
+    fill: #8b5cf6;
+}
+
+.profile-avatar.enlarged,
+.avatar-placeholder.enlarged {
+    transform: scale(1.5);
+    position: relative;
+    z-index: 1000;
+}
