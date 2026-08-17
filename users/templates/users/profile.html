@@ -1,23 +1,37 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
-{% if user.is_authenticated %}
-  <h2>Профіль користувача</h2>
-  <a href="{% url 'profile_update' %}">Оновити профіль</a>
-  <a href="{% url 'profile_delete' pk=request.user.pk %}" class="btn btn-danger">
-    Видалити мій профіль
-</a>
-  {% if user.avatar %}
-    <img src="{{ user.avatar.url }}" alt="Avatar" width="150">
+<link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+
+<section class="profile-container">
+  {% if user.is_authenticated %}
+    <div class="profile-card">
+      <h2 class="profile-title">Профіль користувача</h2>
+
+      <div class="profile-avatar">
+        {% if user.avatar %}
+          <img src="{{ user.avatar.url }}" alt="Avatar">
+        {% else %}
+          <p class="no-avatar">Аватар не завантажено</p>
+        {% endif %}
+      </div>
+
+      <div class="profile-info">
+        <p><strong>Ім’я:</strong> {{ user.first_name }}</p>
+        <p><strong>Прізвище:</strong> {{ user.last_name }}</p>
+        <p><strong>Біографія:</strong> {{ user.bio }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Роль:</strong> {{ user.role }}</p>
+      </div>
+
+      <div class="profile-actions">
+        <a href="{% url 'profile_update' %}" class="btn-card">✏️ Оновити профіль</a>
+        <a href="{% url 'profile_delete' pk=request.user.pk %}" class="btn-card btn-danger">🗑️ Видалити профіль</a>
+      </div>
+    </div>
   {% else %}
-    <p>No avatar uploaded</p>
+    <p class="not-auth">Ви не залогінені</p>
   {% endif %}
-  <p>Ім’я: {{ user.first_name }}</p>
-  <p>Прізвище: {{ user.last_name }}</p>
-  <p>Біографія: {{ user.bio }}</p>
-  <p>Email: {{ user.email }}</p>
-  <!-- <p>Роль: {{ user.role }}</p> -->
-   
-{% else %}
-  <p>Ви не залогінені</p>
-{% endif %}
+</section>
 {% endblock %}

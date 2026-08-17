@@ -11,7 +11,7 @@ class CourseListView(ListView):
     model = Course
     template_name = 'courses/course_list.html'
     context_object_name = 'courses'
-    paginate_by = 8
+    paginate_by = 9
 
     def get_queryset(self):
             return Course.objects.select_related('author').order_by('id')
@@ -28,7 +28,7 @@ class CourseDetailView(DetailView, MultipleObjectMixin):
     model = Course
     template_name = 'courses/course_detail.html'
     context_object_name = 'course'
-    paginate_by = 8
+    paginate_by = 9
 
     def get_context_data(self, **kwargs):
         lessons_queryset = self.object.lessons.all().order_by('id')
