@@ -1,0 +1,57 @@
+.course-delete-container {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 20px;
+}
+
+.delete-card {
+    background: var(--card-bg);
+    border: 1px solid #23184c;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(111, 66, 193, 0.25);
+    text-align: center;
+}
+
+.delete-title {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: var(--purple-bright);
+}
+
+.delete-form {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-danger {
+    background: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-danger:hover {
+    background: #c9302c;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}

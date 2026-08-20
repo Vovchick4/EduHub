@@ -1,10 +1,19 @@
 {% extends "base.html" %}
-{% block content %}
-<h2>Оновити профіль</h2>
+{% load static %}
 
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Зберегти зміни</button>
-</form>
+{% block content %}
+<link rel="stylesheet" href="{% static 'users/css/profile_update.css' %}">
+
+<section class="profile-update-container">
+  <div class="profile-card">
+    <h2 class="profile-title">Оновити профіль</h2>
+
+    <form method="post" enctype="multipart/form-data" class="styled-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn-submit">💾 Зберегти зміни</button>
+      <a href="{% url 'profile' %}" class="btn-cancel">⬅ Скасувати</a>
+    </form>
+  </div>
+</section>
 {% endblock %}

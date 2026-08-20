@@ -14,8 +14,7 @@ urlpatterns = [
     path("create/", CourseCreateView.as_view(), name="course_create"),
     path("<int:pk>/update/", CourseUpdateView.as_view(), name="course_update"),
     path("<int:pk>/delete/", CourseDeleteView.as_view(), name="course_delete"),
-    path("<int:pk>/enroll/", CourseEnrollToggleView.as_view(), name="course_enroll"),
-    path("<int:pk>/unenroll/", CourseEnrollToggleView.as_view(), name="course_unenroll"),
+    path("<int:pk>/enroll-toggle/", CourseEnrollToggleView.as_view(), name="course_enroll_toggle"),
 
     path("<int:course_id>/lessons/", include("lessons.urls"))
 ]

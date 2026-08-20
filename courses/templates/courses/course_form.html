@@ -1,10 +1,19 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<h2>Створити курс</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Зберегти</button>
-</form>
+<link rel="stylesheet" href="{% static 'courses/css/course_form.css' %}">
+
+<section class="course-form-container">
+  <a href="{% url 'course_list' %}" class="btn-card">⬅ Назад до списку курсів</a>
+
+  <div class="form-card">
+    <h2 class="form-title">Створити курс</h2>
+    <form method="post" enctype="multipart/form-data" class="styled-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn-submit">💾 Зберегти</button>
+    </form>
+  </div>
+</section>
 {% endblock %}
