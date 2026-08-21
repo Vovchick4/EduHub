@@ -2,36 +2,60 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
 
-<section class="profile-container">
-  {% if user.is_authenticated %}
-    <div class="profile-card">
-      <h2 class="profile-title">Профіль користувача</h2>
+{% if user.is_authenticated %}
 
-      <div class="profile-avatar">
-        {% if user.avatar %}
-          <img src="{{ user.avatar.url }}" alt="Avatar">
-        {% else %}
-          <p class="no-avatar">Аватар не завантажено</p>
-        {% endif %}
-      </div>
+<div class="profile-container">
 
-      <div class="profile-info">
+    <div class="profile-left">
+
+        <h2 class="profile-text">Профіль користувача</h2>
+
+        <div class="profile-avatar-container">
+    {% if user.avatar %}
+        <img
+    id="profile-avatar"
+    src="{{ user.avatar.url }}"
+    alt="Avatar"
+    class="profile-avatar"
+>
+    {% else %}
+    <div class="avatar-placeholder">
+        <svg class="avatar-icon"
+             viewBox="0 0 24 24"
+             xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+    </div>
+{% endif %}
+</div>
+
+        <div class="profile-buttons">
+            <a href="{% url 'profile_update' %}" class="btn-card">
+                Оновити профіль
+            </a>
+
+            <a href="{% url 'profile_delete' pk=request.user.pk %}" class="btn-card">
+                Видалити мій профіль
+            </a>
+        </div>
+
+    </div>
+
+    <div class="profile-right">
         <p><strong>Ім’я:</strong> {{ user.first_name }}</p>
         <p><strong>Прізвище:</strong> {{ user.last_name }}</p>
-        <p><strong>Біографія:</strong> {{ user.bio }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Роль:</strong> {{ user.role }}</p>
-      </div>
-
-      <div class="profile-actions">
-        <a href="{% url 'profile_update' %}" class="btn-card">✏️ Оновити профіль</a>
-        <a href="{% url 'profile_delete' pk=request.user.pk %}" class="btn-card btn-danger">🗑️ Видалити профіль</a>
-      </div>
+        <p><strong>Біографія:</strong> {{ user.bio }}</p>
     </div>
-  {% else %}
-    <p class="not-auth">Ви не залогінені</p>
-  {% endif %}
-</section>
+
+</div>
+
+{% else %}
+    <p>Ви не залогінені</p>
+{% endif %}
+
+<script src="{% static 'js/profile.js' %}"></script>
+
 {% endblock %}
