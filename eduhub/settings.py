@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from dotenv import load_dotenv
-
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,9 +29,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,10 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'users', 'courses', 'lessons',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,6 +54,30 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+###
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+###
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+from corsheaders.defaults import default_headers
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "Authorization",
+]
+
+# 👇 Дозволяємо методи
+from corsheaders.defaults import default_methods
+
+CORS_ALLOWED_METHODS = list(default_methods) + [
+    "POST",
+    "PUT",
+    "DELETE",
 ]
 
 ROOT_URLCONF = 'eduhub.urls'
@@ -135,3 +161,33 @@ LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/users/profile/'
 LOGOUT_REDIRECT_URL = '/users/login/'
 
+from datetime import timedelta
+
+# 1. Підключаємо JWT як основний метод автентифікації в DRF
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+# 2. Налаштування часу життя та поведінки токенів SimpleJWT
+SIMPLE_JWT = {
+    # Час дії токена доступу (для кожного запиту)
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    
+    # Час дії токена оновлення (для отримання нового access токена)
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    
+    # Автоматично оновлювати refresh токен при використанні (опціонально)
+    "ROTATE_REFRESH_TOKENS": True,
+    
+    # Чорний список для використаних refresh токенів (потребує 'rest_framework_simplejwt.token_blacklist' в INSTALLED_APPS)
+    "BLACKLIST_AFTER_ROTATION": True,
+    
+    # Тип заголовка, який очікує сервер (Authorization: Bearer <токен>)
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    
+    # Поле в токені, за яким ідентифікують користувача (у вашій моделі це id)
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+}
