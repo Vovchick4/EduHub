@@ -1,73 +1,70 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { customBaseQuery } from "./baseApi";
-import type { Lesson } from "./type";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { api } from './baseApi'
+import type { Lesson } from './type'
+import type { PaginatedResponse } from './coursesApi'
 
-export const lessonsApi = createApi({
-  reducerPath: "lessonsApi",
-  baseQuery: customBaseQuery,
-  tagTypes: ["Lessons"],
-  endpoints: (builder) => ({
-    
-    // 1. НОВИЙ (ОБОВ'ЯЗКОВИЙ) ЗАПИТ: Отримання всіх уроків конкретного курсу
-    getLessons: builder.query<Lesson[], number>({
-      query: (courseId) => `/courses/${courseId}/lessons/`,
-      // Цей запит забезпечує як загальний тег списку, так і теги кожного окремого уроку
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: "Lessons" as const, id })),
-              { type: "Lessons", id: "LIST" },
-            ]
-          : [{ type: "Lessons", id: "LIST" }],
-    }),
+export type LessonPayload = Pick<Lesson, 'title' | 'content' | 'order'>
 
-    // 2. Отримання окремого уроку за його ID
-    getLessonById: builder.query<Lesson, { courseId: number; lessonId: number }>({
-      query: ({ courseId, lessonId }) => `/courses/${courseId}/lessons/${lessonId}/`,
-      providesTags: (result, error, { lessonId }) => [{ type: "Lessons", id: lessonId }],
-    }),
-    
-    // 3. Створення уроку
-    createLesson: builder.mutation<Lesson, { courseId: number; lesson: Partial<Lesson> }>({
-      query: ({ courseId, lesson }) => ({
-        url: `/courses/${courseId}/lessons/`,
-        method: "POST",
-        body: lesson,
-      }),
-      // Спалюємо тег списку, щоб RTK Query автоматично зробив фоновий перезапит getLessons
-      invalidatesTags: [{ type: "Lessons", id: "LIST" }],
-    }),
+export const lessonKeys = {
+  all: ['lessons'] as const,
+  lists: () => [...lessonKeys.all, 'list'] as const,
+  list: (courseId: number) => [...lessonKeys.lists(), courseId] as const,
+  details: () => [...lessonKeys.all, 'detail'] as const,
+  detail: (courseId: number, lessonId: number) => [...lessonKeys.details(), courseId, lessonId] as const,
+}
 
-    // 4. Оновлення уроку
-    updateLesson: builder.mutation<Lesson, { courseId: number; lessonId: number; lesson: Partial<Lesson> }>({
-      query: ({ courseId, lessonId, lesson }) => ({
-        url: `/courses/${courseId}/lessons/${lessonId}/`,
-        method: "PATCH",
-        body: lesson,
-      }),
-      // Спалюємо кеш конкретного уроку
-      invalidatesTags: (result, error, { lessonId }) => [{ type: "Lessons", id: lessonId }],
-    }),
-    
-    // 5. Видалення уроку
-    deleteLesson: builder.mutation<void, { courseId: number; lessonId: number }>({
-      query: ({ courseId, lessonId }) => ({
-        url: `/courses/${courseId}/lessons/${lessonId}/`,
-        method: "DELETE",
-      }),
-      // Спалюємо і список (бо уроків стало менше), і кеш самого видаленого уроку
-      invalidatesTags: (result, error, { lessonId }) => [
-        { type: "Lessons", id: "LIST" },
-        { type: "Lessons", id: lessonId }
-      ],
-    }),
-  }),
-});
+const lessonsApi = {
+  list: async (courseId: number) => (
+    await api.get<PaginatedResponse<Lesson>>(`/courses/${courseId}/lessons/`)
+  ).data,
+  detail: async ({ courseId, lessonId }: { courseId: number; lessonId: number }) => (
+    await api.get<Lesson>(`/courses/${courseId}/lessons/${lessonId}/`)
+  ).data,
+  create: async ({ courseId, payload }: { courseId: number; payload: LessonPayload }) => (
+    await api.post<Lesson>(`/courses/${courseId}/lessons/`, payload)
+  ).data,
+  update: async ({ courseId, lessonId, payload }: { courseId: number; lessonId: number; payload: Partial<LessonPayload> }) => (
+    await api.patch<Lesson>(`/courses/${courseId}/lessons/${lessonId}/`, payload)
+  ).data,
+  remove: async ({ courseId, lessonId }: { courseId: number; lessonId: number }) => {
+    await api.delete(`/courses/${courseId}/lessons/${lessonId}/`)
+  },
+}
 
-export const {
-  useGetLessonsQuery, // Експортуємо новий хук для виведення списку уроків на фронтенді
-  useGetLessonByIdQuery,
-  useUpdateLessonMutation,
-  useCreateLessonMutation,
-  useDeleteLessonMutation,
-} = lessonsApi;
+export function useLessonsQuery(courseId: number) {
+  return useQuery({ queryKey: lessonKeys.list(courseId), queryFn: () => lessonsApi.list(courseId) })
+}
+
+export function useLessonQuery(courseId: number, lessonId: number) {
+  return useQuery({
+    queryKey: lessonKeys.detail(courseId, lessonId),
+    queryFn: () => lessonsApi.detail({ courseId, lessonId }),
+  })
+}
+
+export function useCreateLessonMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: lessonsApi.create,
+    onSuccess: (_, { courseId }) => queryClient.invalidateQueries({ queryKey: lessonKeys.list(courseId) }),
+  })
+}
+
+export function useUpdateLessonMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: lessonsApi.update,
+    onSuccess: (_, { courseId, lessonId }) => Promise.all([
+      queryClient.invalidateQueries({ queryKey: lessonKeys.list(courseId) }),
+      queryClient.invalidateQueries({ queryKey: lessonKeys.detail(courseId, lessonId) }),
+    ]),
+  })
+}
+
+export function useDeleteLessonMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: lessonsApi.remove,
+    onSuccess: (_, { courseId }) => queryClient.invalidateQueries({ queryKey: lessonKeys.list(courseId) }),
+  })
+}

@@ -1,12 +1,13 @@
 // src/pages/LoginPage.tsx
 import { useLoginMutation } from '../../api/auth/authApi'
-import { useAppDispatch } from "../../store/hooks";
-import { setToken } from "../../api/auth/authSlice";
+import { getApiErrorMessage } from '../../api/apiError'
+import { saveTokens } from '../../api/auth/tokenStorage'
+import { useNavigate } from 'react-router'
 import { useState } from "react";
 
 export default function LoginPage() {
-  const [login, { isLoading, isError }] = useLoginMutation();
-  const dispatch = useAppDispatch();
+  const login = useLoginMutation();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,8 +15,9 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const result = await login({ email, password }).unwrap();
-      dispatch(setToken(result.token)); // зберігаємо токен у Redux
+      const result = await login.mutateAsync({ email, password });
+      saveTokens({ access: result.access, refresh: result.refresh });
+      navigate('/courses');
     } catch (error) {
       console.error("Помилка входу:", error);
     }
@@ -36,10 +38,10 @@ export default function LoginPage() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button type="submit" disabled={isLoading}>
+      <button type="submit" disabled={login.isPending}>
         Увійти
       </button>
-      {isError && <p>❌ Невірний email або пароль</p>}
+      {login.isError && <p>❌ {getApiErrorMessage(login.error)}</p>}
     </form>
   );
 }

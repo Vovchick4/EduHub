@@ -1,62 +1,55 @@
-import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import type { RootState } from '../store/store';
-import { setCredentials, logout } from '../api/auth/authSlice'
+import axios from 'axios'
+import { clearTokens, getAccessToken, getRefreshToken, saveTokens } from './auth/tokenStorage'
 
-export const BASE_API = 'http://localhost:8000/';
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: BASE_API,
-  prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState).auth.token;
-    if (token) {
-      headers.set('Authorization', `Bearer ${token}`);
+export const api = axios.create({
+  baseURL: apiBaseUrl,
+  headers: { 'Content-Type': 'application/json' },
+})
+
+const refreshClient = axios.create({ baseURL: apiBaseUrl })
+let refreshRequest: Promise<string | null> | null = null
+
+async function refreshAccessToken() {
+  const refresh = getRefreshToken()
+  if (!refresh) return null
+
+  refreshRequest ??= refreshClient
+    .post<{ access: string; refresh?: string }>('/users/api/token/refresh/', { refresh })
+    .then(({ data }) => {
+      saveTokens({ access: data.access, refresh: data.refresh ?? refresh })
+      return data.access
+    })
+    .catch(() => {
+      clearTokens()
+      return null
+    })
+    .finally(() => { refreshRequest = null })
+
+  return refreshRequest
+}
+
+api.interceptors.request.use((config) => {
+  const token = getAccessToken()
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
+})
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const request = error.config as (typeof error.config & { _retry?: boolean }) | undefined
+    const isRefreshRequest = request?.url?.includes('/users/api/token/refresh/')
+    if (error.response?.status !== 401 || !request || request._retry || isRefreshRequest) {
+      return Promise.reject(error)
     }
-    return headers;
+
+    request._retry = true
+    const access = await refreshAccessToken()
+    if (!access) return Promise.reject(error)
+
+    request.headers.Authorization = `Bearer ${access}`
+    return api(request)
   },
-});
-
-export const customBaseQuery: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
-  let result = await baseQuery(args, api, extraOptions);
-
-  // Якщо токен застарів (401 Unauthorized)
-  if (result.error && result.error.status === 401) {
-    
-    // 👇 Дістаємо refresh токен безпосередньо з твоєї нової структури Redux State!
-    const refresh = (api.getState() as RootState).auth.refreshToken;
-
-    if (refresh) {
-      const refreshResult = await baseQuery(
-        {
-          url: '/users/token/refresh/', // Твій шлях без api/
-          method: 'POST',
-          body: { refresh },
-        },
-        api,
-        extraOptions
-      );
-
-      if (refreshResult.data) {
-        const data = refreshResult.data as { access: string; refresh?: string };
-        
-        // 👇 Викликаємо твій новий екшен setCredentials для збереження токенів
-        api.dispatch(setCredentials({ 
-          access: data.access, 
-          refresh: data.refresh // Передаємо новий refresh, якщо увімкнено ROTATE_REFRESH_TOKENS
-        }));
-
-        // Повторюємо початковий запит користувача з новим токеном
-        result = await baseQuery(args, api, extraOptions);
-      } else {
-        // 👇 Якщо оновити не вдалося — викликаємо твій новий екшен logout
-        api.dispatch(logout());
-      }
-    }
-  }
-
-  return result;
-};
+)

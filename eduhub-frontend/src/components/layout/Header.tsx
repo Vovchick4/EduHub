@@ -1,43 +1,46 @@
 import { useLogoutMutation } from "../../api/auth/authApi";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { clearToken } from "../../api/auth/authSlice";
+import { clearTokens } from "../../api/auth/tokenStorage";
+import { useIsAuthenticated } from "../../auth/useAuthState";
 import { Link } from "react-router";
+import { useNavigate } from "react-router";
+import styles from './Header.module.css'
 
 const Header: React.FC = () => {
-  const isAuth = useAppSelector((state) => state.auth.token);
-  const [logout] = useLogoutMutation();
-  const dispatch = useAppDispatch();
+  const isAuthenticated = useIsAuthenticated();
+  const logout = useLogoutMutation();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await logout().unwrap(); // виклик бекенду
+      await logout.mutateAsync();
     } catch (error) {
       console.error("Помилка при логауті:", error);
     } finally {
-      dispatch(clearToken()); // очищаємо токен у Redux
+      clearTokens();
+      navigate('/');
     }
   };
 
   return (
-    <header className="main-header">
-      <div className="header-container">
-        <div className="logo">
-          <Link to="/">🎓 <span className="logo-text">EduHub</span></Link>
+    <header className={styles.mainHeader}>
+      <div className={styles.headerContainer}>
+        <div className={styles.logo}>
+          <Link to="/">🎓 <span className={styles.logoText}>EduHub</span></Link>
         </div>
 
-        <nav className="main-nav">
-          { isAuth ? (
+        <nav className={styles.mainNav}>
+          { isAuthenticated ? (
             <>
-              <Link to="/courses" className="nav-link">Курси</Link>
-              <Link to="/profile" className="nav-link">Профіль</Link>
-              <button onClick={handleLogout} className="btn-nav btn-logout">
+              <Link to="/courses" className={styles.navLink}>Курси</Link>
+              <Link to="/profile" className={styles.navLink}>Профіль</Link>
+              <button onClick={handleLogout} className={`${styles.btnNav} ${styles.btnLogout}`}>
                 Вийти
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="btn-nav btn-login">Вхід</Link>
-              <Link to="/register" className="btn-nav btn-register">Реєстрація</Link>
+              <Link to="/login" className={`${styles.btnNav} ${styles.btnLogin}`}>Вхід</Link>
+              <Link to="/register" className={`${styles.btnNav} ${styles.btnRegister}`}>Реєстрація</Link>
             </>
           )}
         </nav>

@@ -1,39 +1,45 @@
-import React from "react";
-import { Link } from "react-router";
+import { useState } from 'react'
+import { Link } from 'react-router'
+import { getApiErrorMessage } from '../../api/apiError'
+import { useCoursesQuery } from '../../api/coursesApi'
+import { useProfileQuery } from '../../api/profileApi'
+import "./CourseList.css"
 
-const CourseListPage: React.FC = () => {
-  const user = { role: "admin" };
-  const courses = [
-    { id: 1,
-      name: "Курс 1",
-      description: "Опис курсу",
-      preview: { url: "https://example.com/preview1.jpg" },
-    },
-  ];
+const CourseListPage = () => {
+  const [page, setPage] = useState(1)
+  const coursesQuery = useCoursesQuery(page)
+  const profileQuery = useProfileQuery()
+  const courses = coursesQuery.data?.results ?? []
+  const canCreateCourse = profileQuery.data?.role === 'teacher' || profileQuery.data?.role === 'admin'
+
+  if (coursesQuery.isPending) return <p>Завантажуємо курси…</p>
+  if (coursesQuery.isError) return <p>❌ {getApiErrorMessage(coursesQuery.error)}</p>
+
   return (
     <div>
       <section className="course-list-container">
         <h2 className="section-title">Список курсів</h2>
-        {user.role == "teacher" || user.role == "admin" ? (
+        {canCreateCourse ? (
           <div className="actions-bar">
-            <a href="{% url 'course_create' %}" className="btn-card">
+            <Link to="/courses/create" className="btn-card">
               ➕ Додати новий курс
-            </a>
+            </Link>
           </div>
         ) : (
           ""
         )}
 
         <div className="course-grid">
-          {courses ? (
+          {courses.length > 0 ? (
             <>
               {courses.map((course) => (
                 <Link
                   to={`/courses/${course.id}`}
+                  key={course.id}
                   className="course-card" >
                   {course.preview ? 
                     <img
-                      src={course.preview.url}
+                      src={course.preview}
                       alt={course.name}
                       className="course-preview"
                     />
@@ -52,37 +58,20 @@ const CourseListPage: React.FC = () => {
           )}
         </div>
 
-        {/* {% if is_paginated %}
-  <nav className="pagination-container">
-    <ul className="pagination">
-      {% if page_obj.has_previous %}
-        <li className="page-item">
-          <a href="?page={{ page_obj.previous_page_number }}" className="page-link">⬅ Попередня</a>
-        </li>
-      {% endif %}
-
-      {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
-          <li className="page-item active">
-            <span className="page-link">{{ num }}</span>
-          </li>
-        {% else %}
-          <li className="page-item">
-            <a href="?page={{ num }}" className="page-link">{{ num }}</a>
-          </li>
-        {% endif %}
-      {% endfor %}
-
-      {% if page_obj.has_next %}
-        <li className="page-item">
-          <a href="?page={{ page_obj.next_page_number }}" className="page-link">Наступна ➡</a>
-        </li>
-      {% endif %}
-    </ul>
-  </nav> */}
+        {(coursesQuery.data?.previous || coursesQuery.data?.next) && (
+          <nav className="pagination-container" aria-label="Пагінація курсів">
+            <button disabled={!coursesQuery.data?.previous} onClick={() => setPage((current) => current - 1)}>
+              ← Попередня
+            </button>
+            <span>Сторінка {page}</span>
+            <button disabled={!coursesQuery.data?.next} onClick={() => setPage((current) => current + 1)}>
+              Наступна →
+            </button>
+          </nav>
+        )}
       </section>
     </div>
   );
-};
+}
 
 export default CourseListPage;

@@ -1,0 +1,1 @@
+import{S as e}from"./index-CqmrsZpu.js";var t=e(),n=()=>(0,t.jsx)(`div`,{children:`course create`});export{n as default};

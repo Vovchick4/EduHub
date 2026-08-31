@@ -1,43 +1,21 @@
-// src/features/auth/authApi.ts
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { customBaseQuery } from "../baseApi";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { api } from '../baseApi'
 import type { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from '../type'
+import { getRefreshToken } from './tokenStorage'
 
-export const authApi = createApi({
-  reducerPath: "authApi",
-  baseQuery: customBaseQuery,
-  endpoints: (builder) => ({
-    // Логін користувача
-    login: builder.mutation<LoginResponse, LoginRequest>({
-      query: (credentials) => ({
-        url: "/api/login/", // Спрямовуємо на DRF ендпоінт
-        method: "POST",
-        body: credentials,
-      }),
-    }),
-    
-    // Реєстрація користувача
-    register: builder.mutation<RegisterResponse, RegisterRequest>({
-      query: (newUser) => ({
-        url: "/api/register/", // Спрямовуємо на DRF ендпоінт
-        method: "POST",
-        body: newUser,
-      }),
-    }),
-    
-    // Вихід (передаємо об'єкт з refresh токеном для блекліста)
-    logout: builder.mutation<void, { refresh: string }>({
-      query: (body) => ({
-        url: "/api/logout/", // Спрямовуємо на DRF ендпоінт
-        method: "POST",
-        body: body, // Передаємо { refresh: "ваш_refresh_токен" }
-      }),
-    }),
-  }),
-});
+export const authApi = {
+  login: async (payload: LoginRequest) => (await api.post<LoginResponse>('/users/login/', payload)).data,
+  register: async (payload: RegisterRequest) => (await api.post<RegisterResponse>('/users/register/', payload)).data,
+  logout: async () => {
+    const refresh = getRefreshToken()
+    if (refresh) await api.post('/users/api/logout/', { refresh })
+  },
+}
 
-export const {
-  useLoginMutation,
-  useRegisterMutation,
-  useLogoutMutation,
-} = authApi;
+export function useLoginMutation() { return useMutation({ mutationFn: authApi.login }) }
+export function useRegisterMutation() { return useMutation({ mutationFn: authApi.register }) }
+
+export function useLogoutMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({ mutationFn: authApi.logout, onSettled: () => queryClient.clear() })
+}

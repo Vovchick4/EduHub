@@ -1,21 +1,22 @@
 import React from "react";
+import styles from './HomePage.module.css'
 
 const HomePage: React.FC = () => {
   return (
     <>
-      <div className="home-container">
+      <div className={styles.homeContainer}>
         {/* <!-- Hero Section --> */}
-        <section className="hero-section">
-          <div className="avatar-glow">
-            <div className="education-icon">🚀</div>
+        <section className={styles.heroSection}>
+          <div className={styles.avatarGlow}>
+            <div className={styles.educationIcon}>🚀</div>
           </div>
-          <div className="hero-intro">
-            <p className="greeting">Платформа сучасного навчання</p>
-            <h2 className="sub-greeting">Прокачай свої скіли разом з</h2>
-            <h1 className="main-heading">
-              EduHub <span className="oval-badge">платформа...</span>
+          <div className={styles.heroIntro}>
+            <p className={styles.greeting}>Платформа сучасного навчання</p>
+            <h2 className={styles.subGreeting}>Прокачай свої скіли разом з</h2>
+            <h1 className={styles.mainHeading}>
+              EduHub <span className={styles.ovalBadge}>платформа...</span>
             </h1>
-            <p className="hero-subtext">
+            <p className={styles.heroSubtext}>
               Отримуй актуальні знання від практикуючих спеціалістів та будуй
               кар'єру своєї мрії.
             </p>
@@ -23,15 +24,15 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* <!-- Bio Section --> */}
-        <section className="bio-section">
-          <h2 className="typing-title">
-            Твій старт в IT та інженерії<span className="cursor">|</span>
+        <section className={styles.bioSection}>
+          <h2 className={styles.typingTitle}>
+            Твій старт в IT та інженерії<span className={styles.cursor}>|</span>
           </h2>
-          <p className="current-job">
-            Доступно <span className="highlight-blue">20+ напрямків</span> для
+          <p className={styles.currentJob}>
+            Доступно <span className={styles.highlightBlue}>20+ напрямків</span> для
             твого розвитку.
           </p>
-          <p className="bio-description">
+          <p className={styles.bioDescription}>
             Ми зібрали найкращі практичні курси в одному місці. Ніякої нудної
             теорії — тільки реальні проєкти, написання коду, розробка
             інтерфейсів та підтримка менторів на кожному етапі навчання.
@@ -39,14 +40,14 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* <!-- Секція з картками курсів --> */}
-        <section className="experience-section">
-          <h3 className="section-title">Популярні напрямки навчання</h3>
+        <section className={styles.experienceSection}>
+          <h3 className={styles.sectionTitle}>Популярні напрямки навчання</h3>
 
-          <div className="experience-grid">
+          <div className={styles.experienceGrid}>
             {/* <!-- Картка 1 --> */}
-            <div className="exp-card">
-              <div className="card-icon">🐍</div>
-              <div className="card-content">
+            <div className={styles.expCard}>
+              <div className={styles.cardIcon}>🐍</div>
+              <div className={styles.cardContent}>
                 <h4>Python Backend</h4>
                 <p>
                   Вивчи Django, FastAPI, роботу з базами даних SQL та створи
@@ -59,9 +60,9 @@ const HomePage: React.FC = () => {
             </div>
 
             {/* <!-- Картка 2 --> */}
-            <div className="exp-card">
-              <div className="card-icon">💻</div>
-              <div className="card-content">
+            <div className={styles.expCard}>
+              <div className={styles.cardIcon}>💻</div>
+              <div className={styles.cardContent}>
                 <h4>Frontend Development</h4>
                 <p>
                   Опануй верстку, сучасний JavaScript та бібліотеку React для
@@ -74,9 +75,9 @@ const HomePage: React.FC = () => {
             </div>
 
             {/* <!-- Картка 3 --> */}
-            <div className="exp-card">
-              <div className="card-icon">🎨</div>
-              <div className="card-content">
+            <div className={styles.expCard}>
+              <div className={styles.cardIcon}>🎨</div>
+              <div className={styles.cardContent}>
                 <h4>UI/UX Design</h4>
                 <p>
                   Навчися проектувати зручні інтерфейси у Figma, створювати
@@ -89,9 +90,9 @@ const HomePage: React.FC = () => {
             </div>
 
             {/* <!-- Картка 4 --> */}
-            <div className="exp-card">
-              <div className="card-icon">👁️</div>
-              <div className="card-content">
+            <div className={styles.expCard}>
+              <div className={styles.cardIcon}>👁️</div>
+              <div className={styles.cardContent}>
                 <h4>Computer Vision & ML</h4>
                 <p>
                   Поринь у світ штучного інтелекту: від обробки зображень з
@@ -107,25 +108,25 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* <!-- ================= МОДАЛЬНЕ ВІКНО ================= --> */}
-      <div id="courseModal" className="modal-overlay">
-        <div className="modal-box">
-          <button className="modal-close-btn" id="closeModalBtn">
+      <div id="courseModal" className={styles.modalOverlay}>
+        <div className={styles.modalBox}>
+          <button className={styles.modalCloseBtn} id="closeModalBtn">
             &times;
           </button>
 
-          <div className="modal-header">
-            <span id="modalIcon" className="modal-icon-badge">
+          <div className={styles.modalHeader}>
+            <span id="modalIcon" className={styles.modalIconBadge}>
               🎓
             </span>
-            <h3 id="modalTitle" className="modal-title">
+            <h3 id="modalTitle" className={styles.modalTitle}>
               Назва курсу
             </h3>
           </div>
 
-          <div className="modal-body">
-            <p id="modalDescription" className="modal-desc"></p>
+          <div className={styles.modalBody}>
+            <p id="modalDescription" className={styles.modalDesc}></p>
 
-            <div className="modal-program">
+            <div className={styles.modalProgram}>
               <h4>Програма навчання включає:</h4>
               <ul id="modalFeaturesList">
                 {/* <!-- Заповнюється через JS --> */}
@@ -133,10 +134,10 @@ const HomePage: React.FC = () => {
             </div>
           </div>
 
-          <div className="modal-footer">
+          <div className={styles.modalFooter}>
             <button
               id="enrollBtn"
-              className="btn-register modal-action-btn"
+              className={styles.btnRegister}
               data-auth="{{ user.is_authenticated|yesno:'true,false' }}"
               data-role="{% if user.is_authenticated %}{% if user.is_staff or user.profile.is_teacher %}teacher{% else %}student{% endif %}{% else %}guest{% endif %}"
             >
@@ -148,6 +149,7 @@ const HomePage: React.FC = () => {
 
       {/* <!-- Підключення зовнішнього JS файлу --> */}
       <script src="{% static 'js/main.js' %}"></script>
+      
     </>
   );
 };

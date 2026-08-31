@@ -1,22 +1,8 @@
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import axios from 'axios'
 
-export function getErrorMessage(error: unknown): string {
-  if (!error) return 'Невідома помилка';
-
-  if ('status' in (error as FetchBaseQueryError)) {
-    const err = error as FetchBaseQueryError;
-    if (typeof err.data === 'string') {
-      return err.data;
-    }
-    if (typeof err.data === 'object' && err.data !== null) {
-      return JSON.stringify(err.data);
-    }
-    return `Помилка сервера: ${err.status}`;
+export function getApiErrorMessage(error: unknown) {
+  if (axios.isAxiosError<{ detail?: string }>(error)) {
+    return error.response?.data?.detail ?? 'Не вдалося виконати запит. Спробуйте ще раз.'
   }
-
-  if ((error as any).message) {
-    return (error as any).message;
-  }
-
-  return 'Невідома помилка';
+  return 'Сталася неочікувана помилка.'
 }

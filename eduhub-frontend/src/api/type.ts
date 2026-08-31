@@ -1,9 +1,3 @@
-// Слайс авторизації (Точна копія структури твого authSlice)
-export interface AuthState {
-  user: Profile | null; // Дані користувача, які приходять при логіні
-  token: string | null; // Це твій access токен
-  refreshToken: string | null; // Твій refresh токен
-}
 
 export interface LoginRequest {
   email: string;
@@ -54,8 +48,7 @@ export interface CourseList {
   updated_at: string;
 }
 
-// Детальний опис курсу (GET /courses/{id}/)
-// Оскільки уроки ми винесли в окремий ендпоінт, структура полів збігається з CourseList
+
 export type CourseDetail = CourseList
 
 // Об'єкт уроку (GET /courses/{course_id}/lessons/)

@@ -1,0 +1,85 @@
+.lesson-detail-container {
+    max-width: 900px;
+    margin: 0px auto;
+    padding: 20px;
+}
+
+.lesson-card {
+    background: var(--card-bg);
+    border: 1px solid #23184c;
+    border-radius: 16px;
+    margin-top: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(111, 66, 193, 0.25);
+}
+
+.lesson-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: var(--purple-bright);
+    text-align: center;
+}
+
+.lesson-preview {
+    display: block;
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 0 auto 20px;
+    box-shadow: 0 0 15px rgba(111, 66, 193, 0.3);
+}
+
+.lesson-description {
+    margin: 20px 0;
+    font-size: 16px;
+    color: var(--text-main);
+    line-height: 1.6;
+    word-wrap: break-word;      /* перенос довгих слів */
+    overflow-wrap: break-word;  /* сучасний варіант */
+    white-space: pre-wrap; 
+}
+
+.lesson-meta {
+    margin-top: 20px;
+    padding: 15px;
+    background: #1f124b;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(111, 66, 193, 0.25);
+    color: var(--text-main);
+    font-size: 15px;
+}
+
+.lesson-meta ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lesson-meta li {
+    margin-bottom: 8px;
+    color: var(--text-muted);
+}
+
+.lesson-meta a {
+    color: var(--purple-bright);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.lesson-meta a:hover {
+    text-decoration: underline;
+}
+
+.lesson-actions {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.lesson-actions .btn-card {
+    margin: 0 10px;
+}
+
+.btn-danger {
+    background: #d9534f;
+    color: #fff;
+    border: none;
+}

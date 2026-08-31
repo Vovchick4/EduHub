@@ -1,37 +1,42 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import { customBaseQuery } from './baseApi';
-import type { Profile } from './type';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { clearTokens } from './auth/tokenStorage'
+import { api } from './baseApi'
+import type { Profile } from './type'
 
-export const profileApi = createApi({
-  reducerPath: 'profileApi',
-  baseQuery: customBaseQuery,
-  tagTypes: ["Profile"], // 👈 Оголошуємо тег
-  endpoints: (builder) => ({
-    getProfile: builder.query<Profile, void>({
-      query: () => '/users/profile/',
-      providesTags: ["Profile"], // 👈 Прив'язуємо тег
-    }),
-    updateProfile: builder.mutation<Profile, Partial<Profile>>({
-      query: (profileData) => ({
-        url: '/users/profile/',
-        method: 'PATCH',
-        body: profileData,
-      }),
-      invalidatesTags: ["Profile"], // 👈 Спалюємо кеш профілю для його автооновлення
-    }),
-    deleteProfile: builder.mutation<void, void>({
-      query: () => ({
-        url: '/users/profile/',
-        method: 'DELETE',
-      }),
-      invalidatesTags: ["Profile"],
-    }),
-  }),
-});
+export type ProfilePayload = Pick<Profile, 'first_name' | 'last_name' | 'bio' | 'avatar'>
 
+export const profileKeys = {
+  all: ['profile'] as const,
+  current: () => [...profileKeys.all, 'current'] as const,
+}
 
-export const { 
-  useGetProfileQuery, 
-  useUpdateProfileMutation, 
-  useDeleteProfileMutation 
-} = profileApi;
+const profileApi = {
+  current: async () => (await api.get<Profile>('/users/profile/')).data,
+  update: async (payload: Partial<ProfilePayload>) => (
+    await api.patch<Profile>('/users/profile/', payload)
+  ).data,
+  remove: async () => { await api.delete('/users/profile/') },
+}
+
+export function useProfileQuery() {
+  return useQuery({ queryKey: profileKeys.current(), queryFn: profileApi.current })
+}
+
+export function useUpdateProfileMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: profileApi.update,
+    onSuccess: (profile) => queryClient.setQueryData(profileKeys.current(), profile),
+  })
+}
+
+export function useDeleteProfileMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: profileApi.remove,
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: profileKeys.all })
+      clearTokens()
+    },
+  })
+}
