@@ -1,10 +1,13 @@
 from django.urls import path
+from lessons.api_views import CourseLessonListCreateAPIView, LessonRetrieveUpdateDestroyAPIView
 from lessons.views import (
     LessonListView, 
     LessonDetailView, 
     LessonCreateView, 
     LessonUpdateView, 
-    LessonDeleteView
+    LessonDeleteView,
+    CommentCreateView,
+    CommentDeleteView,
 )
 
 urlpatterns = [
@@ -13,4 +16,10 @@ urlpatterns = [
     path("<int:pk>/", LessonDetailView.as_view(), name="lesson_detail"),
     path("<int:pk>/update/", LessonUpdateView.as_view(), name="lesson_update"),
     path("<int:pk>/delete/", LessonDeleteView.as_view(), name="lesson_delete"),
+    path("<int:pk>/comments/create/", CommentCreateView.as_view(), name="comment_create"),
+    path(
+        "<int:lesson_pk>/comments/<int:pk>/delete/",
+        CommentDeleteView.as_view(),
+        name="comment_delete",
+    ),
 ]
