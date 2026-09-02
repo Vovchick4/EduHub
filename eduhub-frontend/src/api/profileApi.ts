@@ -12,10 +12,11 @@ export const profileKeys = {
 
 const profileApi = {
   current: async () => (await api.get<Profile>('/users/profile/')).data,
-  update: async (payload: Partial<ProfilePayload>) => (
-    await api.patch<Profile>('/users/profile/', payload)
-  ).data,
-  remove: async () => { await api.delete('/users/profile/') },
+  update: async (payload: Partial<ProfilePayload>) =>
+    (await api.patch<Profile>('/users/profile/', payload)).data,
+  remove: async () => {
+    await api.delete('/users/profile/')
+  },
 }
 
 export function useProfileQuery() {

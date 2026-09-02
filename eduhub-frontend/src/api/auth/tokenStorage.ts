@@ -22,8 +22,12 @@ export function subscribeToAuth(listener: () => void) {
   }
 }
 
-export function getAccessToken() { return localStorage.getItem(ACCESS_TOKEN_KEY) }
-export function getRefreshToken() { return localStorage.getItem(REFRESH_TOKEN_KEY) }
+export function getAccessToken() {
+  return localStorage.getItem(ACCESS_TOKEN_KEY)
+}
+export function getRefreshToken() {
+  return localStorage.getItem(REFRESH_TOKEN_KEY)
+}
 
 export function getTokens(): AuthTokens | null {
   const access = getAccessToken()

@@ -1,21 +1,20 @@
-import React, { Suspense } from 'react';
-import { Outlet } from 'react-router';
-import Header from './Header';
-import Footer from './Footer';
+import React, { Suspense } from 'react'
+import { Outlet } from 'react-router'
+import Header from './Header'
+import Footer from './Footer'
 
 const Layout: React.FC = () => {
   return (
-    <div className='app-container'>
-      <Header/>
-      
-        
+    <div className="app-container">
+      <Header />
+
       <main>
         <Suspense fallback={<main>Завантаження…</main>}>
-        <Outlet/>
+          <Outlet />
         </Suspense>
       </main>
-      
-      <Footer/>
+
+      <Footer />
     </div>
   )
 }

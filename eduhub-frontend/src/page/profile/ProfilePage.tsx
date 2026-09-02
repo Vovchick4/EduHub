@@ -30,7 +30,11 @@ const ProfilePage = () => {
         <h2 className={styles.profileText}>Профіль користувача</h2>
         <div className={styles.profileAvatarContainer}>
           {profile.avatar ? (
-            <img src={profile.avatar} alt={`Аватар ${profile.first_name}`} className={styles.profileAvatar} />
+            <img
+              src={profile.avatar}
+              alt={`Аватар ${profile.first_name}`}
+              className={styles.profileAvatar}
+            />
           ) : (
             <div className={styles.avatarPlaceholder} aria-label="Аватар відсутній">
               <svg className={styles.avatarIcon} viewBox="0 0 24 24" aria-hidden="true">
@@ -41,7 +45,9 @@ const ProfilePage = () => {
           )}
         </div>
         <div className={styles.profileButtons}>
-          <Link to="/profile/update" className="btn-card">Оновити профіль</Link>
+          <Link to="/profile/update" className="btn-card">
+            Оновити профіль
+          </Link>
           <button onClick={handleDelete} disabled={deleteProfile.isPending} className="btn-card">
             {deleteProfile.isPending ? 'Видаляємо…' : 'Видалити мій профіль'}
           </button>
@@ -50,11 +56,21 @@ const ProfilePage = () => {
       </div>
 
       <div className={styles.profileRight}>
-        <p><strong>Ім’я:</strong> {profile.first_name}</p>
-        <p><strong>Прізвище:</strong> {profile.last_name}</p>
-        <p><strong>Email:</strong> {profile.email}</p>
-        <p><strong>Роль:</strong> {profile.role}</p>
-        <p><strong>Біографія:</strong> {profile.bio || 'Не вказано'}</p>
+        <p>
+          <strong>Ім’я:</strong> {profile.first_name}
+        </p>
+        <p>
+          <strong>Прізвище:</strong> {profile.last_name}
+        </p>
+        <p>
+          <strong>Email:</strong> {profile.email}
+        </p>
+        <p>
+          <strong>Роль:</strong> {profile.role}
+        </p>
+        <p>
+          <strong>Біографія:</strong> {profile.bio || 'Не вказано'}
+        </p>
       </div>
     </section>
   )

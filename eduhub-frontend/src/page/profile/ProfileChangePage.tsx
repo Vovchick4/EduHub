@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { getApiErrorMessage } from '../../api/apiError'
-import { type ProfilePayload, useProfileQuery, useUpdateProfileMutation } from '../../api/profileApi'
+import {
+  type ProfilePayload,
+  useProfileQuery,
+  useUpdateProfileMutation,
+} from '../../api/profileApi'
 import styles from './ProfilePage.module.css'
 
 type ProfileFormValues = Omit<ProfilePayload, 'avatar'> & { avatar: string }
@@ -30,7 +34,10 @@ const ProfileChangePage = () => {
     })
   }, [profileQuery.data])
 
-  const updateField = <Key extends keyof ProfileFormValues>(key: Key, value: ProfileFormValues[Key]) => {
+  const updateField = <Key extends keyof ProfileFormValues>(
+    key: Key,
+    value: ProfileFormValues[Key],
+  ) => {
     setForm((current) => ({ ...current, [key]: value }))
   }
 
@@ -59,11 +66,19 @@ const ProfileChangePage = () => {
       <form onSubmit={handleSubmit}>
         <label>
           Ім’я
-          <input value={form.first_name} onChange={(event) => updateField('first_name', event.target.value)} required />
+          <input
+            value={form.first_name}
+            onChange={(event) => updateField('first_name', event.target.value)}
+            required
+          />
         </label>
         <label>
           Прізвище
-          <input value={form.last_name} onChange={(event) => updateField('last_name', event.target.value)} required />
+          <input
+            value={form.last_name}
+            onChange={(event) => updateField('last_name', event.target.value)}
+            required
+          />
         </label>
         <label>
           Біографія
@@ -71,13 +86,19 @@ const ProfileChangePage = () => {
         </label>
         <label>
           URL аватара
-          <input type="url" value={form.avatar} onChange={(event) => updateField('avatar', event.target.value)} />
+          <input
+            type="url"
+            value={form.avatar}
+            onChange={(event) => updateField('avatar', event.target.value)}
+          />
         </label>
         <div className={styles.profileButtons}>
           <button type="submit" disabled={updateProfile.isPending} className="btn-card">
             {updateProfile.isPending ? 'Зберігаємо…' : 'Зберегти'}
           </button>
-          <Link to="/profile" className="btn-card">Скасувати</Link>
+          <Link to="/profile" className="btn-card">
+            Скасувати
+          </Link>
         </div>
         {updateProfile.isError && <p>❌ {getApiErrorMessage(updateProfile.error)}</p>}
       </form>

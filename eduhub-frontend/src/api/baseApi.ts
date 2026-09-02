@@ -25,7 +25,9 @@ async function refreshAccessToken() {
       clearTokens()
       return null
     })
-    .finally(() => { refreshRequest = null })
+    .finally(() => {
+      refreshRequest = null
+    })
 
   return refreshRequest
 }

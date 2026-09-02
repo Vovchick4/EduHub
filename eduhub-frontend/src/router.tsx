@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 import { createBrowserRouter } from 'react-router'
-import Layout from "./components/layout/Layout";
+import Layout from './components/layout/Layout'
 import { RequireAuth } from './auth/RequireAuth'
 import HomePage from './page/home/HomePage'
 const LoginPage = lazy(() => import('./page/auth/LoginPage'))
@@ -17,27 +17,27 @@ const LessonCreatePage = lazy(() => import('./page/lessons/LessonCreateUpdatePag
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Layout />,
     errorElement: <h1>404</h1>,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "login", element: <LoginPage /> },
-      { path: "register", element: <RegistrationPage /> },
+      { path: 'login', element: <LoginPage /> },
+      { path: 'register', element: <RegistrationPage /> },
       {
         element: <RequireAuth />,
         children: [
-          { path: "profile", element: <ProfilePage /> },
-          { path: "profile/update", element: <ProfileChangePage /> },
-          { path: "courses", element: <CourseListPage /> },
-          { path: "courses/:id", element: <CourseDetailPage /> },
-          { path: "courses/:id/update", element: <CourseUpdatePage /> },
-          { path: "courses/create", element: <CourseCreatePage /> },
-          { path: "courses/:id/lessons/create", element: <LessonCreatePage /> },
-          { path: "courses/:id/lessons/:lessonId", element: <LessonDetailPage /> },
-          { path: "courses/:id/lessons/:lessonId/update", element: <LessonUpdatePage /> },
+          { path: 'profile', element: <ProfilePage /> },
+          { path: 'profile/update', element: <ProfileChangePage /> },
+          { path: 'courses', element: <CourseListPage /> },
+          { path: 'courses/:id', element: <CourseDetailPage /> },
+          { path: 'courses/:id/update', element: <CourseUpdatePage /> },
+          { path: 'courses/create', element: <CourseCreatePage /> },
+          { path: 'courses/:id/lessons/create', element: <LessonCreatePage /> },
+          { path: 'courses/:id/lessons/:lessonId', element: <LessonDetailPage /> },
+          { path: 'courses/:id/lessons/:lessonId/update', element: <LessonUpdatePage /> },
         ],
       },
     ],
   },
-]);
+])

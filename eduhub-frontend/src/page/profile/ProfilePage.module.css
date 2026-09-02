@@ -1,11 +1,68 @@
-.profileContainer { display: flex; align-items: flex-start; justify-content: space-between; gap: 80px; width: 100%; }
-.profileText { color: #a855f7; text-align: center; width: 100%; }
-.profileLeft { display: flex; flex-direction: column; align-items: center; }
-.profileRight { flex: 1; padding-top: 10px; }
-.profileRight p { margin-bottom: 20px; }
-.profileAvatarContainer { width: 150px; height: 150px; margin-top: 20px; }
-.profileAvatar { display: block; width: 100%; height: 100%; border-radius: 50%; cursor: pointer; object-fit: cover; transition: transform .3s ease; }
-.avatarPlaceholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; border: 2px solid #8b5cf6; border-radius: 50%; background: #1d1136; }
-.avatarIcon { width: 100px; height: 100px; fill: #8b5cf6; }
-.profileButtons { display: flex; gap: 15px; margin-top: 70px; }
-@media (max-width: 768px) { .profileContainer { flex-direction: column; gap: 32px; } .profileButtons { margin-top: 32px; flex-wrap: wrap; } }
+.profileContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 80px;
+  width: 100%;
+}
+.profileText {
+  color: #a855f7;
+  text-align: center;
+  width: 100%;
+}
+.profileLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.profileRight {
+  flex: 1;
+  padding-top: 10px;
+}
+.profileRight p {
+  margin-bottom: 20px;
+}
+.profileAvatarContainer {
+  width: 150px;
+  height: 150px;
+  margin-top: 20px;
+}
+.profileAvatar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  cursor: pointer;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.avatarPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #8b5cf6;
+  border-radius: 50%;
+  background: #1d1136;
+}
+.avatarIcon {
+  width: 100px;
+  height: 100px;
+  fill: #8b5cf6;
+}
+.profileButtons {
+  display: flex;
+  gap: 15px;
+  margin-top: 70px;
+}
+@media (max-width: 768px) {
+  .profileContainer {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .profileButtons {
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+}
