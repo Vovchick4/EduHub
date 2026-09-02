@@ -2,7 +2,7 @@
 # 1. Специфічне для Frontend (React / Node)
 # ==========================================
 node_modules/
-/dist
+**/dist/
 /build
 .eslintcache
 npm-debug.log*

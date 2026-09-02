@@ -1,1 +1,0 @@
-import{a as e}from"./index-CqmrsZpu.js";function t(t){return e.isAxiosError(t)?t.response?.data?.detail??`Не вдалося виконати запит. Спробуйте ще раз.`:`Сталася неочікувана помилка.`}export{t};

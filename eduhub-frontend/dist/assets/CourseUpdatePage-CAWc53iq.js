@@ -1,1 +1,0 @@
-import{t as e}from"./react-SIfiwpqq.js";import{S as t}from"./index-CqmrsZpu.js";e();var n=t(),r=()=>(0,n.jsx)(`div`,{children:`update`});export{r as default};
