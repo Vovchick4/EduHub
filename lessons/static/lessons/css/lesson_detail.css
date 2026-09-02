@@ -1,0 +1,95 @@
+.lesson-detail-container {
+    max-width: 900px;
+    margin: 0px auto;
+    padding: 20px;
+}
+
+.lesson-card {
+    background: var(--card-bg);
+    border: 1px solid #23184c;
+    border-radius: 16px;
+    margin-top: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(111, 66, 193, 0.25);
+}
+
+.lesson-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: var(--purple-bright);
+    text-align: center;
+}
+
+.lesson-preview {
+    display: block;
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 0 auto 20px;
+    box-shadow: 0 0 15px rgba(111, 66, 193, 0.3);
+}
+
+.lesson-description {
+    margin: 20px 0;
+    font-size: 16px;
+    color: var(--text-main);
+    line-height: 1.6;
+    word-wrap: break-word;      /* перенос довгих слів */
+    overflow-wrap: break-word;  /* сучасний варіант */
+    white-space: pre-wrap; 
+}
+
+.lesson-meta {
+    margin-top: 20px;
+    padding: 15px;
+    background: #1f124b;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(111, 66, 193, 0.25);
+    color: var(--text-main);
+    font-size: 15px;
+}
+
+.lesson-meta ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lesson-meta li {
+    margin-bottom: 8px;
+    color: var(--text-muted);
+}
+
+.lesson-meta a {
+    color: var(--purple-bright);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.lesson-meta a:hover {
+    text-decoration: underline;
+}
+
+.lesson-actions {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.lesson-actions .btn-card {
+    margin: 0 10px;
+}
+
+.btn-danger {
+    background: #d9534f;
+    color: #fff;
+    border: none;
+}
+/* Lesson comments */
+.comments-section { margin-top: 2rem; border-top: 1px solid #e5e7eb; padding-top: 1.5rem; }
+.comment-form textarea { width: 100%; box-sizing: border-box; margin: .75rem 0; padding: .75rem; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }
+.comments-list { display: grid; gap: .75rem; margin-top: 1rem; }
+.comment-card { padding: 1rem; background: #f8fafc; border-radius: 8px; }
+.comment-card p { color: #0f172a; }
+.comment-header { display: flex; justify-content: space-between; gap: 1rem; color: #475569; }
+.comment-header time { font-size: .875rem; white-space: nowrap; }
+.comment-delete { border: 0; background: transparent; color: #b91c1c; cursor: pointer; padding: 0; }
+.no-comments { color: #64748b; }

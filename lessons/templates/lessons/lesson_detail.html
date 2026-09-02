@@ -1,22 +1,75 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<h2>{{ lesson.title }}</h2>
-<p>{{ lesson.content }}</p>
+<link rel="stylesheet" href="{% static 'lessons/css/lesson_detail.css' %}">
 
-{% if request.user == lesson.course.author or request.user.role == 'admin' %}
-    <div class="teacher-actions mt-4">
-        <!-- Посилання на редагування -->
-        <a href="{% url 'lesson_update' course_id=lesson.course.pk pk=lesson.pk %}" class="btn btn-warning">
-            Редагувати урок
-        </a>
-        
-        <!-- Посилання на ту саму сторінку підтвердження видалення -->
-        <a href="{% url 'lesson_delete' course_id=lesson.course.pk pk=lesson.pk %}" class="btn btn-danger">
-            Видалити урок
-        </a>
+<section class="lesson-detail-container">
+  <a href="{% url 'course_detail' lesson.course.id %}" class="btn-card">⬅ Назад до курсу</a>
+
+  <div class="lesson-card">
+    <h2 class="lesson-title">{{ lesson.title }}</h2>
+
+    {% if lesson.preview %}
+      <img src="{{ lesson.preview.url }}" alt="{{ lesson.title }}" class="lesson-preview">
+    {% endif %}
+
+    <p class="lesson-description">{{ lesson.content }}</p>
+
+    <div class="lesson-meta">
+      <ul>
+        <li>📅 Дата створення: {{ lesson.created_at|date:"d.m.Y H:i" }}</li>
+        <li>🕒 Оновлено: {{ lesson.updated_at|date:"d.m.Y H:i" }}</li>
+        <li>👨‍🏫 Викладач: {{ lesson.course.author }}</li>
+        <li>📖 Належить до курсу: 
+          <a href="{% url 'course_detail' lesson.course.id %}">{{ lesson.course.name }}</a>
+        </li>
+      </ul>
     </div>
-{% endif %}
 
-<a href="{% url 'course_detail' pk=lesson.course.pk %}">⬅ Назад до списку уроків</a>
+    <div class="lesson-actions">
+      {% if user == lesson.author or user.role == "admin" %}
+        <a href="{% url 'lesson_update' lesson.course.id lesson.id %}" class="btn-card">✏️ Редагувати</a>
+        <a href="{% url 'lesson_delete' lesson.course.id lesson.id %}" class="btn-card btn-danger">🗑️ Видалити</a>
+      {% endif %}
+    </div>
+
+    <section class="comments-section">
+      <h3>Коментарі ({{ lesson.comments.count }})</h3>
+
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'comment_create' course_id=lesson.course_id pk=lesson.pk %}" class="comment-form">
+          {% csrf_token %}
+          {{ comment_form.content }}
+          {% if comment_form.content.errors %}
+            <div class="form-errors">{{ comment_form.content.errors }}</div>
+          {% endif %}
+          <button type="submit" class="btn-card">Додати коментар</button>
+        </form>
+      {% else %}
+        <p><a href="{% url 'login' %}">Увійдіть</a>, щоб залишити коментар.</p>
+      {% endif %}
+
+      <div class="comments-list">
+        {% for comment in lesson.comments.all %}
+          <article class="comment-card">
+            <div class="comment-header">
+              <strong>{{ comment.author.get_full_name|default:comment.author.email }}</strong>
+              <time datetime="{{ comment.created_at|date:'c' }}">{{ comment.created_at|date:"d.m.Y H:i" }}</time>
+            </div>
+            <p>{{ comment.content|linebreaksbr }}</p>
+            {% if user == comment.author or user == lesson.course.author or user.role == "admin" %}
+              <form method="post" action="{% url 'comment_delete' course_id=lesson.course_id lesson_pk=lesson.pk pk=comment.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="comment-delete">Видалити</button>
+              </form>
+            {% endif %}
+          </article>
+        {% empty %}
+          <p class="no-comments">Коментарів ще немає. Будьте першим!</p>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</section>
 {% endblock %}

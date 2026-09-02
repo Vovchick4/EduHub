@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect, get_object_or_404
 
 from courses.models import Course
-from lessons.form import LessonForm
-from lessons.models import Lesson
+from lessons.form import CommentForm, LessonForm
+from lessons.models import Comment, Lesson
 
 class LessonListView(ListView):
     model = Lesson
@@ -19,6 +19,11 @@ class LessonDetailView(DetailView):
     model = Lesson
     template_name = "lessons/lesson_detail.html"
     context_object_name = "lesson"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["comment_form"] = CommentForm()
+        return context
 
 
 class LessonCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -86,3 +91,73 @@ class LessonDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse("course_detail", kwargs={"pk": self.kwargs.get("course_id")})
+
+
+class CommentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+
+    def get_lesson(self):
+        return get_object_or_404(
+            Lesson,
+            pk=self.kwargs["pk"],
+            course_id=self.kwargs["course_id"],
+        )
+
+    def test_func(self):
+        lesson = self.get_lesson()
+        user = self.request.user
+        return (
+            user == lesson.course.author
+            or user.role == "admin"
+            or lesson.course.students.filter(pk=user.pk).exists()
+        )
+
+    def handle_no_permission(self):
+        messages.error(self.request, "Лише учасники курсу можуть залишати коментарі.")
+        return redirect("lesson_detail", course_id=self.kwargs["course_id"], pk=self.kwargs["pk"])
+
+    def form_valid(self, form):
+        form.instance.lesson = self.get_lesson()
+        form.instance.author = self.request.user
+        messages.success(self.request, "Коментар додано.")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "lesson_detail",
+            kwargs={"course_id": self.kwargs["course_id"], "pk": self.kwargs["pk"]},
+        )
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+
+    def get_queryset(self):
+        return Comment.objects.filter(
+            lesson_id=self.kwargs["lesson_pk"],
+            lesson__course_id=self.kwargs["course_id"],
+        )
+
+    def test_func(self):
+        comment = self.get_object()
+        return (
+            self.request.user == comment.author
+            or self.request.user == comment.lesson.course.author
+            or self.request.user.role == "admin"
+        )
+
+    def handle_no_permission(self):
+        messages.error(self.request, "Ви не можете видалити цей коментар.")
+        return redirect(
+            "lesson_detail",
+            course_id=self.kwargs["course_id"],
+            pk=self.kwargs["lesson_pk"],
+        )
+
+    def get_success_url(self):
+        messages.success(self.request, "Коментар видалено.")
+        return reverse(
+            "lesson_detail",
+            kwargs={"course_id": self.kwargs["course_id"], "pk": self.kwargs["lesson_pk"]},
+        )
