@@ -1,0 +1,42 @@
+.homeContainer { flex: 1; max-width: 1100px; width: 100%; margin: 0 auto; padding: 20px; }
+.heroSection { display: flex; align-items: center; justify-content: center; gap: 60px; margin-bottom: 80px; flex-wrap: wrap; }
+.avatarGlow { position: relative; display: flex; align-items: center; justify-content: center; width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgb(111 66 193 / 60%) 0%, rgb(10 5 27 / 0%) 70%); }
+.educationIcon { font-size: 80px; user-select: none; animation: float 3s ease-in-out infinite; }
+.heroIntro { max-width: 500px; }
+.greeting { color: var(--text-muted); font-size: 18px; }
+.subGreeting { margin-top: 10px; font-size: 28px; font-weight: 400; }
+.mainHeading { margin: 10px 0; font-size: 48px; line-height: 1.2; }
+.ovalBadge { display: inline-block; padding: 0 15px; border: 2px solid var(--purple-bright); border-radius: 50px; color: var(--purple-bright); }
+.heroSubtext { margin-top: 15px; color: var(--text-muted); font-size: 14px; }
+.bioSection { max-width: 800px; margin-bottom: 80px; }
+.typingTitle { font-size: 36px; font-weight: 600; }
+.cursor { color: var(--purple-bright); animation: blink .8s infinite; }
+.currentJob { margin: 10px 0 25px; font-size: 18px; }
+.highlightBlue { color: var(--blue-accent); font-weight: bold; }
+.bioDescription { max-width: 700px; color: var(--text-muted); font-size: 18px; }
+.experienceSection { margin-top: 40px; }
+.sectionTitle { margin-bottom: 40px; font-size: 28px; }
+.experienceGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 25px; }
+.expCard { display: flex; align-items: flex-start; gap: 20px; padding: 30px; border: 1px solid #23184c; border-radius: 16px; background: var(--card-bg); transition: transform .3s, box-shadow .3s; }
+.expCard:hover { border-color: var(--purple-glow); box-shadow: 0 10px 30px rgb(111 66 193 / 20%); transform: translateY(-5px); }
+.cardIcon { padding: 10px; border-radius: 12px; background: #1f124b; font-size: 32px; }
+.cardContent h4 { margin-bottom: 10px; font-size: 20px; }
+.cardContent p { margin-bottom: 20px; color: var(--text-muted); font-size: 14px; }
+.modalOverlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; background: rgb(10 5 27 / 85%); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s ease; }
+.modalBox { position: relative; width: 90%; max-width: 550px; padding: 35px; border: 1px solid var(--purple-bright); border-radius: 20px; background: var(--header-bg); box-shadow: 0 0 30px rgb(161 85 255 / 30%); transform: translateY(-20px); transition: transform .3s ease; }
+.modalCloseBtn { position: absolute; top: 15px; right: 20px; border: 0; background: none; color: var(--text-muted); cursor: pointer; font-size: 28px; }
+.modalCloseBtn:hover { color: var(--purple-bright); }
+.modalHeader { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+.modalIconBadge { padding: 8px 14px; border-radius: 12px; background: #1f124b; font-size: 32px; }
+.modalTitle { color: var(--text-main); font-size: 24px; }
+.modalDesc { margin-bottom: 20px; color: var(--text-muted); font-size: 15px; }
+.modalProgram { margin-bottom: 25px; padding: 20px; border: 1px solid #23184c; border-radius: 12px; background: rgb(22 13 51 / 60%); }
+.modalProgram h4 { margin-bottom: 12px; color: var(--purple-bright); font-size: 16px; }
+.modalProgram ul { padding-left: 0; list-style: none; }
+.modalProgram li { position: relative; margin-bottom: 8px; padding-left: 22px; color: var(--text-main); font-size: 14px; }
+.modalProgram li::before { position: absolute; left: 0; color: var(--purple-bright); content: '✓'; font-weight: bold; }
+.modalFooter { text-align: right; }
+.btnRegister { border: 0; border-radius: 10px; padding: 10px 20px; background: linear-gradient(135deg, var(--purple-bright), #7f39fb); color: #fff; cursor: pointer; font-weight: 600; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@media (max-width: 768px) { .experienceGrid { grid-template-columns: 1fr; } .heroSection { flex-direction: column; text-align: center; } .mainHeading { font-size: 36px; } }

@@ -1,0 +1,42 @@
+:root {
+  --bg-color: #0a051b;
+  --header-bg: #11092c;
+  --text-main: #ffffff;
+  --text-muted: #b3b0c2;
+  --purple-glow: #6f42c1;
+  --purple-bright: #a155ff;
+  --blue-accent: #00d2ff;
+  --card-bg: linear-gradient(135deg, #160d33 0%, #0d0624 100%);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root { min-height: 100%; }
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+a { color: inherit; text-decoration: none; }
+button, input, textarea { font: inherit; }
+
+/* Shared action used by profile and course pages. */
+.btn-card {
+  display: inline-block;
+  border: 1px solid var(--purple-bright);
+  border-radius: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  color: var(--purple-bright);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: background .3s, color .3s;
+}
+
+.btn-card:hover:not(:disabled) { background: var(--purple-bright); color: #fff; }
+.btn-card:disabled { cursor: not-allowed; opacity: .6; }
