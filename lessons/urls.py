@@ -1,4 +1,5 @@
 from django.urls import path
+from lessons.api_views import CourseLessonListCreateAPIView, LessonRetrieveUpdateDestroyAPIView
 from lessons.views import (
     LessonListView, 
     LessonDetailView, 

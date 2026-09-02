@@ -1,61 +1,63 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<div class="courses-container">
-  <h2>Список курсів</h2>
+<link rel="stylesheet" href="{% static 'courses/css/course_list.css' %}">
 
-  <!-- Кнопка створення курсу доступна ТІЛЬКИ для teacher та admin -->
+<section class="course-list-container">
+  <h2 class="section-title">Список курсів</h2>
   {% if request.user.role == 'teacher' or request.user.role == 'admin' %}
-  <div class="actions-bar" style="margin-bottom: 20px;">
-    <a href="{% url 'course_create' %}" class="btn btn-primary">➕ Додати новий курс</a>
+  <div class="actions-bar">
+    <a href="{% url 'course_create' %}" class="btn-card">➕ Додати новий курс</a>
   </div>
   {% endif %}
 
-  <ul class="courses-list">
+  <div class="course-grid">
     {% for course in courses %}
-    <li>
-      <a href="{% url 'course_detail' course.pk %}">
-        <h2>{{ course.title }}</h2>
-      </a>  
-        <p>Автор: {{ course.author.get_full_name }}</p>
-      {% if course.teacher == user %}
-      <p class="text-muted">Ви є викладачем цього курсу.</p>
+    <a href="{% url 'course_detail' course.pk %}" class="course-card">
+      {% if course.preview %}
+        <img src="{{ course.preview.url }}" alt="{{ course.name }}" class="course-preview">
       {% else %}
-      <!-- Перевірка: чи студент вже записаний на курс -->
-      {% if course.id in enrolled_course_ids %}
-      <form action="{% url 'course_enroll' course.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">❌ Відписатися</button>
-      </form>
-      {% else %}
-      <form action="{% url 'course_enroll' course.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-success">📝 Записатися</button>
-      </form>
+        <div class="course-icon">📘</div>
       {% endif %}
-     
-
-      {% endif %}
-    </li>
+      <div class="course-content">
+        <h4>{{ course.name }}</h4>
+        <p>{{ course.description|truncatewords:20 }}</p>
+      </div>
+    </a>
     {% empty %}
-    <li>Немає доступних курсів.</li>
+    <p>Немає доступних курсів.</p>
     {% endfor %}
-  </ul>
+  </div>
 
   {% if is_paginated %}
-  <div class="pagination" style="margin-top: 25px;">
-    {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.previous_page_number }}">Попередня</a>
-    {% endif %}
+  <nav class="pagination-container">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a href="?page={{ page_obj.previous_page_number }}" class="page-link">⬅ Попередня</a>
+        </li>
+      {% endif %}
 
-    <span class="page-current">
-      Сторінка {{ page_obj.number }} із {{ page_obj.paginator.num_pages }}
-    </span>
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <li class="page-item active">
+            <span class="page-link">{{ num }}</span>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
 
-    {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}">Наступна</a>
-    {% endif %}
-  </div>
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a href="?page={{ page_obj.next_page_number }}" class="page-link">Наступна ➡</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
   {% endif %}
-</div>
+</section>
 {% endblock %}
