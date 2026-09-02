@@ -10,4 +10,4 @@ class Lesson(models.Model):
     def Meta(self):
         ordering = ['order']
     def __str__(self):
-        return f"{self.course.title} - {self.title}"
+        return f"{self.course.name} - {self.title}"
