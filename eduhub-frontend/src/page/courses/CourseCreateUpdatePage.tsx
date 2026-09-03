@@ -44,9 +44,10 @@ const CourseCreateUpdatePage = () => {
   const error = createMutation.error ?? updateMutation.error
   const pending = createMutation.isPending || updateMutation.isPending
   return (
-    <section className="course-create-update">
-      <h2>{editing ? 'Редагувати курс' : 'Створити курс'}</h2>
-      <form onSubmit={submit}>
+    <section className="course-form-container">
+      <div className="form-card">
+      <h2 className="form-title">{editing ? 'Редагувати курс' : 'Створити курс'}</h2>
+      <form className="styled-form" onSubmit={submit}>
         <label>
           Назва
           <input value={name} onChange={(e) => setName(e.target.value)} maxLength={30} required />
@@ -61,13 +62,14 @@ const CourseCreateUpdatePage = () => {
           />
         </label>
         {error && <p>❌ {getApiErrorMessage(error)}</p>}
-        <button className="btn-card" disabled={pending}>
+        <button className="btn-submit" disabled={pending}>
           {pending ? 'Зберігаємо…' : 'Зберегти'}
         </button>
         <Link to={editing ? `/courses/${courseId}` : '/courses'} className="btn-card">
           Скасувати
         </Link>
       </form>
+      </div>
     </section>
   )
 }

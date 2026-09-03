@@ -20,12 +20,9 @@ urlpatterns = [
 
     # GET - отримати список курсів (з пагінацією), POST - створити новий курс
     path("courses/", CourseListCreateAPIView.as_view(), name="course-list-create"),
-    
     # GET - деталі курсу, PUT/PATCH - редагування, DELETE - видалення
     path("courses/<int:pk>/", CourseRetrieveUpdateDestroyAPIView.as_view(), name="course-detail-update-delete"),
-    
     # POST - записатися або відписатися від курсу
     path("api/courses/<int:pk>/enroll/", CourseEnrollToggleAPIView.as_view(), name="course-enroll-toggle"),
-
     path("<int:course_id>/lessons/", include("lessons.urls"))
 ]

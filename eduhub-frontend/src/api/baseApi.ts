@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { clearTokens, getAccessToken, getRefreshToken, saveTokens } from './auth/tokenStorage'
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
+// When the frontend runs locally without a .env file, requests must still
+// reach Django rather than being sent to the Vite development server.
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:8000'
 
 export const api = axios.create({
   baseURL: apiBaseUrl,
