@@ -7,6 +7,7 @@ import {
   useLessonQuery,
   useUpdateLessonMutation,
 } from '../../api/lessonsApi'
+import '../courses/CourseCreateUpdate.css'
 
 const LessonCreateUpdatePage = () => {
   const { id, lessonId } = useParams()
@@ -47,9 +48,10 @@ const LessonCreateUpdatePage = () => {
   const error = createMutation.error ?? updateMutation.error
   const pending = createMutation.isPending || updateMutation.isPending
   return (
-    <section className="course-create-update">
-      <h2>{editing ? 'Редагувати урок' : 'Додати урок'}</h2>
-      <form onSubmit={submit}>
+    <section className="course-form-container">
+      <div className="form-card">
+      <h2 className="form-title">{editing ? 'Редагувати урок' : 'Додати урок'}</h2>
+      <form className="styled-form" onSubmit={submit}>
         <label>
           Назва
           <input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={30} required />
@@ -74,13 +76,14 @@ const LessonCreateUpdatePage = () => {
           />
         </label>
         {error && <p>❌ {getApiErrorMessage(error)}</p>}
-        <button className="btn-card" disabled={pending}>
+        <button className="btn-submit" disabled={pending}>
           {pending ? 'Зберігаємо…' : 'Зберегти'}
         </button>
         <Link to={`/courses/${courseId}`} className="btn-card">
           Скасувати
         </Link>
       </form>
+      </div>
     </section>
   )
 }

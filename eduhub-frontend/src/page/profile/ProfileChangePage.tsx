@@ -61,9 +61,10 @@ const ProfileChangePage = () => {
   if (profileQuery.isError) return <p>❌ {getApiErrorMessage(profileQuery.error)}</p>
 
   return (
-    <section className={styles.profileContainer}>
+    <section className={`${styles.profileContainer} ${styles.profileEditCard}`}>
       <h2>Редагування профілю</h2>
-      <form onSubmit={handleSubmit}>
+      <p className={styles.profileEditLead}>Оновіть інформацію, яку бачитимуть учасники EduHub.</p>
+      <form className={styles.profileForm} onSubmit={handleSubmit}>
         <label>
           Ім’я
           <input
