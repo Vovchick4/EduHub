@@ -14,14 +14,14 @@ export type CoursePayload = Pick<CourseList, 'name' | 'description' | 'preview'>
 export const courseKeys = {
   all: ['courses'] as const,
   lists: () => [...courseKeys.all, 'list'] as const,
-  list: (page: number) => [...courseKeys.lists(), { page }] as const,
+  list: (page: number, search: string) => [...courseKeys.lists(), { page, search }] as const,
   details: () => [...courseKeys.all, 'detail'] as const,
   detail: (id: number) => [...courseKeys.details(), id] as const,
 }
 
 const coursesApi = {
-  list: async (page = 1) =>
-    (await api.get<PaginatedResponse<CourseList>>('/courses/courses/', { params: { page } })).data,
+  list: async (page = 1, search = '') =>
+    (await api.get<PaginatedResponse<CourseList>>('/courses/courses/', { params: { page, search }, })).data,
   detail: async (id: number) => (await api.get<CourseDetail>(`/courses/courses/${id}/`)).data,
   create: async (payload: CoursePayload) =>
     (await api.post<CourseDetail>('/courses/courses/', payload)).data,
@@ -35,10 +35,10 @@ const coursesApi = {
       .data,
 }
 
-export function useCoursesQuery(page = 1) {
+export function useCoursesQuery(page = 1, search = '') {
   return useQuery({
-    queryKey: courseKeys.list(page),
-    queryFn: () => coursesApi.list(page),
+    queryKey: courseKeys.list(page, search),
+    queryFn: () => coursesApi.list(page, search),
     placeholderData: keepPreviousData,
   })
 }
