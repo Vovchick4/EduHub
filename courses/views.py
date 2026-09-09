@@ -6,6 +6,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from courses.form import CourseForm
 from courses.models import Course
 from django.shortcuts import get_object_or_404, redirect
+from rest_framework import viewsets, filters
+from .models import Course
+from .serializers import CourseSerializer
+
+class CourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    
+    # Додаємо підтримку пошуку
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'description']  # Пошук за назвою та описом
 
 class CourseListView(ListView):
     model = Course
