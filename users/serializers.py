@@ -27,9 +27,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    # При редагуванні профілю ім'я та прізвище не можуть бути порожніми (через null=False у моделі)
+    # При редагуванні профілю ім'я та прізвище не можуть бути порожніми
     first_name = serializers.CharField(required=False, allow_blank=False)
     last_name = serializers.CharField(required=False, allow_blank=False)
+
+    # Явно вказуємо ImageField:
+    # - required=False: завантаження нового аватара не є обов'язковим при кожному оновленні
+    # - allow_null=True: дозволяє видалити аватар, передавши null
+    avatar = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = User
@@ -37,8 +42,27 @@ class UserProfileSerializer(serializers.ModelSerializer):
         # Блокуємо зміну id, email та критичної для безпеки ролі
         read_only_fields = ["id", "email", "role"]
 
+    def to_internal_value(self, data):
+        # Якщо avatar передано як рядок (наприклад, старий URL або порожній рядок з форми/JSON),
+        # не вважаємо це завантаженням нового файлу і прибираємо з даних перед валідацією ImageField
+        if hasattr(data, 'copy'):
+            data = data.copy()
+        elif isinstance(data, dict):
+            data = dict(data)
+
+        if 'avatar' in data:
+            avatar_val = data.get('avatar')
+            if isinstance(avatar_val, str):
+                data.pop('avatar', None)
+
+        return super().to_internal_value(data)
+
     def update(self, instance, validated_data):
-        # Безпечно оновлюємо тільки дозволені поля користувача
+        # Якщо передано новий аватар (файл або null), видаляємо старий файл з диска
+        new_avatar = validated_data.get('avatar')
+        if 'avatar' in validated_data and instance.avatar and instance.avatar != new_avatar:
+            instance.avatar.delete(save=False)
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()

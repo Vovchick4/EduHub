@@ -1,6 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -54,6 +55,7 @@ class LoginAPIView(generics.GenericAPIView):
 class ProfileAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get_object(self):
         # Метод повертає саме того користувача, який зараз авторизований по JWT токену
